@@ -1,0 +1,9 @@
+# Local development notes
+PROYECTO.md
+
+# NetBeans project
+nbproject/
+
+# Python
+__pycache__/
+*.pyc
