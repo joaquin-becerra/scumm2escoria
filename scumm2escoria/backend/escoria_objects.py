@@ -637,7 +637,7 @@ func interrupt():
 
         # SCUMM (mouseWatch): clicking an inventory item with no verb selected, or
         # with Pick up, uses the inventory verb. The 9-verbs UI did nothing.
-        # (js_ports/escoria_patches.js does the same in JS: it reads js_config["patches"])
+        # (GEJE does the same in JS: it reads [scumm2escoria] patches/* in project.godot)
         self.js_config["patches"] = {"inventoryVerb": bool(self.game.inventory_verb), "pickup": action_name("PickUp")}
         if self.game.inventory_verb:
             game_gd = self.path(f"res://addons/{UI_ADDON}/game.gd")

@@ -290,13 +290,12 @@ original game.
   base project settings (input map, autoloads).
 - This converter was created with [Claude](https://claude.ai) (Anthropic).
 
-- The generated project includes `js_ports/`, for the JS engine in
-  `godot-escoria-js-engine` (which translates the generated GDScript itself):
-  `escoria_patches.js` is the JS side of the converter's changes to Escoria's
-  addons (the JS engine runs Escoria as it comes), from the template in
-  `scumm2escoria/backend/js_ports/`, and `config.js` says what was patched
-  for each game. Its `patches` list names every changed function, so the
-  engine's GDScript translator can tell they are covered.
+- The generated project is a plain Godot project. The converter changes a few
+  functions of Escoria's addons; it lists what it patched for each game in a
+  `[scumm2escoria]` section of `project.godot`, which
+  [GEJE](https://github.com/joaquin-becerra/godot-escoria-js-engine) (Godot
+  Escoria JS Engine) reads to install the JS side of those patches when it
+  builds the game for the browser.
 
 - Bundles hold the game's own assets, so don't commit a bundle made from a game
   you can't redistribute.
