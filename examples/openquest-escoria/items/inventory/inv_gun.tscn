@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://items/inventory/inv_gun.png" id="1"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_item.gd" id="2"]
+
+[node name="inv_gun" type="Area2D"]
+process_mode = 1
+script = ExtResource("2")
+global_id = "inv_gun"
+esc_script = "res://items/inventory/inv_gun.esc"
+tooltip_name = "gun"
+default_action = "use"
+default_action_inventory = "use"
+actions_requiring_target_object = PackedStringArray("use", "give")
+inventory_texture = ExtResource("1")
+inventory_texture_hovered = ExtResource("1")
+custom_data = {
+"preposition_use": "on",
+"preposition_give": "to",
+"scumm_classes": [],
+"scumm_actor": false
+}
+
+[node name="sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+visible = false
+
+[node name="collision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 160, 0, 160, 64, 0, 64)

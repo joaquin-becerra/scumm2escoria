@@ -1,0 +1,60 @@
+:setup
+	if "inv_obj_19" in inventory:
+		set_interactive("obj_19", false)
+	if actor_2_room == "Room2":
+		set_active("player", true)
+	else:
+		set_active("player", false)
+	if actor_1_room == "Room2":
+		set_active("actor_1", true)
+	else:
+		set_active("actor_1", false)
+	scumm_restore_names()
+	scumm_fade_in()
+
+:ready
+	# TODO scumm: setRoomColor(0, 0, 0, 0);
+	# TODO scumm: actorObject[actor_1] = obj_23;
+	actor_1_room = "Room2"
+	set_active("actor_1", true)
+	teleport_pos("actor_1", 80, 360)
+	anim("actor_1", "idle_down")
+	if !(b0):
+		actor_2_room = "Room2"
+		set_active("player", true)
+		teleport_pos("player", 1760, 0)
+		# TODO scumm: setCameraAt(0);
+		# TODO scumm: panCameraTo(440);
+		camera_set_target(0, "player")
+		walk_to_pos_block("player", 1720, 320)
+		say("player", "Hello mortal.")
+		say("player", "Welcome to the first GPL Scumm game !!!")
+		# override block (not skipped: VAR_OVERRIDE = 0)
+		b0 = 1
+	else:
+		rand_global("scumm_random", 2)
+		if scumm_random == 0:
+			actor_2_room = "Room2"
+			set_active("player", true)
+			teleport_pos("player", 1952, 360)
+			set_angle("player", 0)
+			camera_set_target(0, "player")
+			walk_to_pos("player", 1680, 360)
+		if scumm_random == 1:
+			actor_2_room = "Room2"
+			set_active("player", true)
+			teleport_pos("player", 1840, 0)
+			camera_set_target(0, "player")
+			walk_to_pos("player", 1800, 160)
+		if scumm_random == 2:
+			actor_2_room = "Room2"
+			set_active("player", true)
+			teleport_pos("player", 240, 576)
+			set_angle("player", 3)
+			camera_set_target(0, "player")
+			walk_to_pos("player", 320, 480)
+		if !(b1):
+			say("player", "I think I'm lost.")
+			b1 = 1
+	set_gui_visible(true)
+	# TODO scumm: Room1::script_3();

@@ -1,0 +1,8 @@
+:pickup
+	if cube_disappeared:
+		say("player", "The artifact is still being held in place.")
+	else:
+		say("player", "The artifact is protected by some kind of forcefield container.")
+
+:look
+	say("player", "The holy artifact!")

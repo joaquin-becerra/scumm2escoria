@@ -1,0 +1,28 @@
+:setup
+	set_gui_visible(false)
+	if ensign_zob_room == "Skyline":
+		set_active("player", true)
+	else:
+		set_active("player", false)
+	if ufo_actor_room == "Skyline":
+		set_active("ufo_actor", true)
+	else:
+		set_active("ufo_actor", false)
+	scumm_restore_names()
+	scumm_roam("", "setup")
+	scumm_fade_in()
+
+:ready
+	accept_input("SKIP")
+	ufo_actor_room = "Skyline"
+	set_active("ufo_actor", true)
+	teleport_pos("ufo_actor", -200, 320)
+	walk_to_pos_block("ufo_actor", 560, 320)
+	say("ufo_actor", "These are the coordinates.")
+	say("ufo_actor", "Ensign, bring the teleportation device online.")
+	wait(1.67)
+	# override block (not skipped: VAR_OVERRIDE = 0)
+	scumm_screen_effect(34438)
+	accept_input("ALL")
+	scumm_fade_out()
+	change_scene("res://rooms/office_room/office_room.tscn")

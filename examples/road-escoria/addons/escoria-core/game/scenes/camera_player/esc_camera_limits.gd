@@ -1,0 +1,40 @@
+## Describes a bounding box that limits the camera movement in the scene.
+class_name ESCCameraLimits
+extends RefCounted
+
+## The left side of the bounding box.
+var limit_left: int = -10000
+
+## The right side of the bounding box.
+var limit_right: int = 10000
+
+## The top side of the bounding box.
+var limit_top: int = -10000
+
+## The bottom side of the bounding box.
+var limit_bottom: int = 10000
+
+## Initializes the camera limits with the given bounding box values.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |left|`int`|The left side of the bounding box|yes|[br]
+## |right|`int`|The right side of the bounding box|yes|[br]
+## |top|`int`|The top side of the bounding box|yes|[br]
+## |bottom|`int`|The bottom side of the bounding box|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func _init(
+	left: int,
+	right: int,
+	top: int,
+	bottom: int
+):
+	limit_left = left
+	limit_right = right
+	limit_top = top
+	limit_bottom = bottom

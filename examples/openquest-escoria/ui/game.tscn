@@ -1,0 +1,137 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/escoria-ui-keyboard-9verbs/game.gd" id="1"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/scenes/dialogs/esc_dialog_player.gd" id="2"]
+[ext_resource type="Theme" path="res://ui/theme_text.tres" id="3"]
+[ext_resource type="Texture2D" path="res://ui/verb_bar.png" id="4"]
+[ext_resource type="Script" path="res://ui/sentence_line.gd" id="5"]
+[ext_resource type="FontFile" path="res://fonts/verb_chset.fnt" id="6"]
+[ext_resource type="PackedScene" path="res://ui/verbs_menu.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://ui/inventory_ui.tscn" id="8"]
+[ext_resource type="Theme" path="res://ui/theme_gui.tres" id="9"]
+[ext_resource type="PackedScene" path="res://addons/escoria-core/ui_library/menus/main_menu/main_menu.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://addons/escoria-core/ui_library/menus/pause_menu/pause_menu.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://addons/escoria-core/game/scenes/camera_player/camera.tscn" id="12"]
+
+[node name="game" type="Node2D"]
+script = ExtResource("1")
+main_menu = NodePath("ui/main_menu")
+pause_menu = NodePath("ui/pause_menu")
+ui_parent_control_node = NodePath("ui/Control")
+
+[node name="dialog_layer" type="CanvasLayer" parent="."]
+
+[node name="ESCDialogPlayer" type="Control" parent="dialog_layer"]
+layout_mode = 3
+script = ExtResource("2")
+theme = ExtResource("3")
+
+[node name="ui" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="ui"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1
+anchor_bottom = 1
+mouse_filter = 2
+
+[node name="panel_down" type="Control" parent="ui/Control"]
+layout_mode = 0
+offset_top = 576
+offset_right = 1280
+offset_bottom = 800
+
+[node name="background" type="TextureRect" parent="ui/Control/panel_down"]
+layout_mode = 0
+offset_left = 0
+offset_top = 0
+offset_right = 1280
+offset_bottom = 224
+texture = ExtResource("4")
+mouse_filter = 2
+
+[node name="VBoxContainer" type="Control" parent="ui/Control/panel_down"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="MarginContainer" type="Control" parent="ui/Control/panel_down/VBoxContainer"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="tooltip" type="RichTextLabel" parent="ui/Control/panel_down/VBoxContainer/MarginContainer"]
+layout_mode = 0
+offset_right = 1280
+mouse_filter = 2
+script = ExtResource("5")
+bbcode_enabled = true
+scroll_active = false
+text = ""
+offset_top = 12
+offset_bottom = 60
+color = Color(0.8353, 0.8196, 0.5569, 1)
+theme_override_fonts/normal_font = ExtResource("6")
+theme_override_font_sizes/normal_font_size = 40
+
+[node name="HBoxContainer" type="Control" parent="ui/Control/panel_down/VBoxContainer"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="VerbsMargin" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="verbs_menu" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/VerbsMargin" instance=ExtResource("7")]
+
+[node name="MainMargin" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="VBoxContainer" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/MainMargin"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="MarginContainer" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/MainMargin/VBoxContainer"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="MenuButton" type="Button" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/MainMargin/VBoxContainer/MarginContainer"]
+visible = false
+
+[node name="room_select" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/MainMargin/VBoxContainer"]
+visible = false
+
+[node name="InventoryMargin" type="Control" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+
+[node name="inventory_ui" parent="ui/Control/panel_down/VBoxContainer/HBoxContainer/InventoryMargin" instance=ExtResource("8")]
+
+[node name="hover_stack" type="Label" parent="ui"]
+visible = false
+
+[node name="main_menu" parent="ui" instance=ExtResource("10")]
+visible = false
+theme = ExtResource("9")
+
+[node name="pause_menu" parent="ui" instance=ExtResource("11")]
+visible = false
+theme = ExtResource("9")
+
+[node name="camera" parent="." instance=ExtResource("12")]

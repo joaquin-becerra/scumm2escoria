@@ -1,0 +1,21 @@
+:use
+	if obj_20_state:
+		if !(obj_20_state):
+			say("player", "It's already closed.")
+			stop
+		set_state("obj_20", "state_0")
+		obj_20_state = 0
+		# TODO scumm: startObject2(objA, SetBoxes,[vrb, objA]);
+	else:
+		if obj_20_state:
+			say("player", "It's already open.")
+			stop
+		set_state("obj_20", "state_1")
+		obj_20_state = 1
+		# TODO scumm: startObject2(objA, SetBoxes,[vrb, objA]);
+
+:exit_scene
+	if obj_20_state:
+		say("player", "Even open, this door is way too small for me.")
+	else:
+		say("player", "It's closed.")

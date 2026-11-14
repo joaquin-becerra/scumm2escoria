@@ -1,0 +1,38 @@
+:use
+	if terminal_activated and !cube_disappeared:
+		scumm_roam("commander_zif", "pause")
+		accept_input("SKIP")
+		set_gui_visible(false)
+		scumm_anim("player", "raise_arm")
+		wait(0.42)
+		scumm_anim("player", "lower_arm")
+		wait(0.42)
+		scumm_anim("cube_actor", "dissolve")
+		wait(0.83)
+		say("player", "Looks like I broke the encryption.")
+		commander_zif_room = "SecretRoom"
+		set_active("commander_zif", true)
+		teleport_pos("commander_zif", 160, 400)
+		walk_to_pos_block("commander_zif", 380, 400)
+		turn_to("commander_zif", "player")
+		say("commander_zif", "Well done, ensign.")
+		say("commander_zif", "Now retrieve the relic!")
+		say("player", "Small problem, sir.")
+		say("commander_zif", "What's that?")
+		say("player", "It is still held in place.")
+		say("commander_zif", "Then find a way to bring it down.")
+		say("player", "Aye, sir!")
+		# override block (not skipped: VAR_OVERRIDE = 0)
+		cube_actor_room = "InventoryItems"
+		set_active("cube_actor", false)
+		cube_disappeared = 1
+		scumm_roam("commander_zif", "start", 320, 880, 420, 520)
+		accept_input("ALL")
+		set_gui_visible(true)
+	elif cube_disappeared:
+		say("player", "The terminal has shut down.")
+	else:
+		say("player", "The terminal is offline.")
+
+:look
+	say("player", "Looks pretty ordinary.")

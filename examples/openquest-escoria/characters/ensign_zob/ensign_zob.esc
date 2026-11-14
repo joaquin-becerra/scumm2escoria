@@ -1,0 +1,33 @@
+:give
+	# TODO scumm: condition if(objB && objB is Person)
+	if false:
+		say("player", "I don't think i should be giving this away.")
+		stop
+	else:
+		say("player", "I can't do that !")
+
+:pickup
+	say("player", "I don't need them.")
+
+:use
+	# TODO scumm: condition if(objA == commanderZif || objA == ensignZob)
+	if false:
+		# TODO scumm: VAR_EGO = objA;
+		camera_set_target(0, "player")
+	else:
+		say("player", "I can't just *use* someone.")
+
+:open
+	say("player", "They don't seem to open.")
+
+:look
+	say("player", "Some kind of lifeform.")
+
+:smell
+	say("player", "They have no odour.")
+
+:talk
+	say("player", "I don't know how to communicate with them.")
+
+:move
+	say("player", "Moving them would accomplish nothing.")

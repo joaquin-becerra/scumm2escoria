@@ -1,0 +1,13 @@
+:use
+	# Room2::local_200()
+	scumm_screen_effect(34438)
+	scumm_fade_out()
+	queue_event("room2", "setup")
+	queue_event("room2", "ready")
+
+:exit_scene
+	# Room2::local_200()
+	scumm_screen_effect(34438)
+	scumm_fade_out()
+	queue_event("room2", "setup")
+	queue_event("room2", "ready")

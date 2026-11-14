@@ -1,0 +1,17 @@
+:give "commander_zif"
+	say("player", "I don't think i should be giving this away.")
+
+:give "carol"
+	say("player", "I don't think i should be giving this away.")
+
+:use "inv_scanner"
+	say("player", "They won't go back in.")
+
+:use "commander_zif"
+	say("player", "I can't use that on someone!")
+
+:use "carol"
+	say("player", "I can't use that on someone!")
+
+:look
+	say("player", "They used to power the hand scanner.")

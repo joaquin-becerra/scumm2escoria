@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://characters/actor_1/frames/f_afc183b18c.png" id="1"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_item.gd" id="2"]
+[ext_resource type="Resource" path="res://characters/actor_1/actor_1_animations.tres" id="3"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_dialog_location.gd" id="4"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_interaction_location.gd" id="5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(192, 192)
+
+[node name="actor_1" type="Area2D"]
+process_mode = 1
+script = ExtResource("2")
+global_id = "actor_1"
+esc_script = "res://characters/actor_1/actor_1.esc"
+tooltip_name = "Santa"
+default_action = "look"
+is_movable = true
+interaction_angle = 270
+custom_data = {
+"scumm_base_offset_y": -140,
+"scumm_classes": [],
+"scumm_actor": true
+}
+dialog_color = Color(1.0000, 1.0000, 0.0000, 1)
+speed = 240
+animations = ExtResource("3")
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"idle_down"
+autoplay = "idle_down"
+centered = false
+offset = Vector2(-100, -140)
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2(-4, -44)
+shape = SubResource("RectangleShape2D_2")
+
+[node name="dialog_position" type="Marker2D" parent="."]
+position = Vector2(-240, -240)
+script = ExtResource("4")
+
+[node name="approach" type="Marker2D" parent="."]
+position = Vector2(240, 0)
+script = ExtResource("5")
+interaction_angle = 270

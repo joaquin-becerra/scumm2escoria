@@ -1,0 +1,264 @@
+## Describes the arguments of commands that extend `ESCBaseCommand`.
+class_name ESCCommandArgumentDescriptor
+extends RefCounted
+
+
+## As the get_type command was deprecated with Godot 2.x w we need a way to determine
+## variable types. Ideally these wouldn't be hardcoded but there's no GDScript 3.x command to
+## turn a type back to its name.[br]
+##[br]
+## TODO: With Escoria having been ported to Godot 4, this concept will need to be revisited.
+const GODOT_TYPE_LIST = ["nil", "bool", "int", "real",  "string", \
+	"vector2", "rect2", "vector3",  "matrix32", "plane", "quat", \
+	"aabb", "matrix3",  "transform", "color", "image", "node_path", \
+	"rid", "object", "input_event", "dictionary", "array", \
+	"raw_array", "int_array", "real_array", "string_array", \
+	"vector2_array", "vector3_array", "color_array", "max"]
+
+
+## Maximum number of total arugments the command can handle
+var max_args: int = 0
+
+## Number of required arguments the command expects
+var min_args: int = 0
+
+## The types the arguments as TYPE_ constants. If the command is called with
+## more arguments than there are entries in the types array, the additional
+## arguments will be checked against the last entry of the types array.
+var types: Array = []
+
+## The default values for the arguments
+var defaults: Array = []
+
+## Whether to strip quotes on specific arguments
+var strip_quotes: Array = []
+
+## Whether the final argument is a series of varargs
+var has_varargs: bool = false
+
+## The filename from which the relevant command is being called, if available.
+var filename: String = ""
+
+## The line number from the file the relevant command is being called from.
+var line_number: int = 0
+
+## Initializes the descriptor.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |p_min_args|`int`|Minimum number of required arguments.|no|[br]
+## |p_types|`Array`|Array of argument types.|no|[br]
+## |p_defaults|`Array`|Array of default values for arguments.|no|[br]
+## |p_strip_quotes|`Array`|Array indicating whether to strip quotes.|no|[br]
+## |p_has_varargs|`bool`|Whether the final argument is a series of varargs.|no|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func _init(
+	p_min_args: int = 0,
+	p_types: Array = [],
+	p_defaults: Array = [],
+	p_strip_quotes: Array = [true],
+	p_has_varargs: bool = false
+):
+	max_args = p_types.size()
+	min_args = p_min_args
+	types = p_types
+	defaults = p_defaults
+	strip_quotes = p_strip_quotes
+	has_varargs = p_has_varargs
+
+
+## Combines the default argument values with the given arguments.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |arguments|`Array`|an array of arguments to pass in to the command, with the array's order corresponding to the order of the arguments the command expects. If the number of arguments passed in is fewer than the maximum number of arguments the command can handle, default values are used for those arguments not passed in.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `Array` value. (`Array`)
+func prepare_arguments(arguments: Array) -> Array:
+	var complete_arguments = defaults
+	var varargs = []
+
+	for index in range(arguments.size()):
+		# If we have too many arguments passed in, complete_arguments won't
+		# be able to match 1:1. This condition will be validated later but so
+		# to avoid duplicating validation code, just grow complete_arguments
+		# since the arguments won't be used anyway.
+		if index >= complete_arguments.size():
+			if has_varargs:
+				varargs.append(arguments[index])
+			else:
+				complete_arguments.append(arguments[index])
+		elif index == complete_arguments.size() - 1 and has_varargs:
+			# Varargs are a special case and need to be gathered and added at
+			# the end as an array, untyped and unchecked. They should also only
+			# appear at the very end of a command's argument list.
+			varargs.append(arguments[index])
+		else:
+#			complete_arguments[index] = ESCUtils.get_typed_value(
+#				arguments[index],
+#				types[index]
+#			)
+			complete_arguments[index] = arguments[index]
+			var strip = strip_quotes[0]
+			if strip_quotes.size() == complete_arguments.size():
+				strip = strip_quotes[index]
+
+			if strip and typeof(complete_arguments[index]) == TYPE_STRING:
+				complete_arguments[index] = complete_arguments[index].replace(
+					'"',
+					''
+				)
+
+	if has_varargs:
+		complete_arguments[complete_arguments.size() - 1] = varargs
+
+	return complete_arguments
+
+
+## Validates whether the given arguments match the command descriptor.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |command|`String`|the name of the command; used for logging purposes.|yes|[br]
+## |arguments|`Array`|the arguments to be passed to the command|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `bool` value. (`bool`)
+func validate(command: String, arguments: Array) -> bool:
+	var required_args_count: int = _count_leading_non_null_values(arguments, min_args)
+
+	if required_args_count < min_args:
+		var verb = "was" if required_args_count == 1 else "were"
+
+		escoria.logger.error(
+			self,
+			"Invalid arguments for command %s." % command +
+			" Arguments didn't match minimum size {num}: Only {args} {verb} found." \
+				.format({"num":self.min_args,"args":required_args_count,"verb":verb}) +
+			" %s" % _get_error_info()
+		)
+		return false
+
+	if arguments.size() > self.max_args and not has_varargs:
+		escoria.logger.error(
+			self,
+			"Invalid arguments for command %s. " % command +
+			"Maximum number of arguments ({num}) exceeded: {args}.".format(
+				{"num":self.max_args,"args":arguments}
+			) +
+			" %s" % _get_error_info()
+		)
+		return false
+
+	for index in range(arguments.size()):
+		if arguments[index] == null:
+			# No type checking for null values
+			continue
+
+		if has_varargs and index == arguments.size() - 1:
+			# If we have varargs at the end, do not validate them.
+			continue
+
+		var correct = false
+		var types_index = index
+		if types_index > types.size():
+			types_index = types.size() - 1
+		if not self.types[types_index] is Array:
+			self.types[types_index] = [self.types[index]]
+		for type in self.types[types_index]:
+			if not correct:
+				correct = self._is_type(arguments[index], type)
+
+		if not correct:
+			var allowed_types = "[ "
+			for type in self.types[types_index]:
+				allowed_types += GODOT_TYPE_LIST[type] + " or "
+			allowed_types = allowed_types.substr(0, allowed_types.length() - 3) + "]"
+			escoria.logger.error(
+				self,
+				"Argument type did not match descriptor for command \"%s\". "
+						% command +
+				"Argument %d (\"%s\") is of type %s. Expected %s."
+						% [
+							index,
+							arguments[index],
+							GODOT_TYPE_LIST[typeof(arguments[index])],
+							allowed_types
+						] +
+				" %s" % _get_error_info()
+			)
+			return false
+	return true
+
+
+## A string with the file and line number for error reporting.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a string with the file and line number for error reporting. The error info string. (`String`)
+func _get_error_info() -> String:
+	return "(File: \"%s\", line %s.)" % [filename, line_number]
+
+
+## Checks whether the given argument is of the given type.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |argument|`Variant`|Argument to test.|yes|[br]
+## |type|`int`|Type to check.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns Whether the argument is of the given type. (`bool`)
+func _is_type(argument, type: int) -> bool:
+	if typeof(argument) == TYPE_FLOAT:
+		if int(argument) == argument and type == TYPE_INT:
+			return true
+	elif typeof(argument) == TYPE_INT:
+		if int(argument) == argument and type == TYPE_FLOAT:
+			return true
+
+	return typeof(argument) == type
+
+
+## Counts the number of non-null values that exist at the beginning of the array up to a specified index.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |array_to_check|`Array`|Array to check for leading non-null values.|yes|[br]
+## |max_index|`int`|Maximum (inclusive) index to check in array_to_check.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns the total number of entries at the start of array_to_check that are not null. (`int`)
+func _count_leading_non_null_values(array_to_check: Array, max_index: int) -> int:
+	if array_to_check == null or max_index < 0:
+		return 0
+
+	var leading_non_nulls_count: int = 0
+
+	for i in range(max_index):
+		if array_to_check[i] != null:
+			leading_non_nulls_count += 1
+
+	return leading_non_nulls_count

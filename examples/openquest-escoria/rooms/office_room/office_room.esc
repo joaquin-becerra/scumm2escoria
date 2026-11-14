@@ -1,0 +1,104 @@
+:setup
+	if plant_state == 2:
+		set_active("bullets", true)
+	else:
+		set_active("bullets", false)
+	if ensign_zob_room == "OfficeRoom":
+		set_active("player", true)
+	else:
+		set_active("player", false)
+	if commander_zif_room == "OfficeRoom":
+		set_active("commander_zif", true)
+	else:
+		set_active("commander_zif", false)
+	if carol_room == "OfficeRoom":
+		set_active("carol", true)
+	else:
+		set_active("carol", false)
+	scumm_restore_names()
+	scumm_roam("", "setup")
+	scumm_fade_in()
+
+:ready
+	var first_init = 0
+	var quick_init = 0
+	first_init = !inited_game
+	quick_init = first_init and did_office_intro
+	if !(inited_game):
+		inited_game = 1
+	else:
+		ensign_zob_room = "OfficeRoom"
+		set_active("player", true)
+		teleport_pos("player", 1184, 440)
+		walk_to_pos("player", 1000, 440)
+		if light_switch_state == 1:
+			scumm_room_intensity(143, 123, 119)
+		stop
+	if !(did_office_intro):
+		accept_input("SKIP")
+		set_gui_visible(false)
+		did_office_intro = 1
+		wait(2.5)
+		ensign_zob_room = "OfficeRoom"
+		set_active("player", true)
+		teleport_pos("player", 680, 440)
+		commander_zif_room = "OfficeRoom"
+		set_active("commander_zif", true)
+		teleport_pos("commander_zif", 800, 480)
+		scumm_sound("res://sounds/beamed_snd.wav")
+		scumm_anim("commander_zif", "beam")
+		scumm_anim("player", "beam")
+		wait(2.5)
+		say("commander_zif", "Hmmm...")
+		# Actors::setZifOnThePhone()
+		set_animations("commander_zif", "res://characters/commander_zif/commander_zif_stand_with_phone_talk_to_phone_start.tres")
+		scumm_sound("res://sounds/phone_snd.wav")
+		scumm_anim("commander_zif", "look_around")
+		wait(0.5)
+		say("commander_zif", "Commander's log, star date 432.1")
+		say("commander_zif", "Arrival complete on the planet of mostly water.")
+		carol_room = "OfficeRoom"
+		set_active("carol", true)
+		teleport_pos("carol", 304, 392)
+		anim("carol", "init_down")
+		wait(2.0)
+		anim("carol", "idle_down")
+		say("carol", "Are you done in here?")
+		turn_to("commander_zif", "carol")
+		turn_to("player", "carol")
+		wait(0.83)
+		say("commander_zif", "An indigenous lifeform...")
+		walk_to_pos_block("player", 420, 420)
+		say("commander_zif", "Ensign Zob and I shall proceed to locate the artifact.")
+		say("commander_zif", "We shall eliminate any resistance we encounter.")
+		walk_to_pos_block("commander_zif", 640, 480)
+		say("commander_zif", "This appears to be a crude society.")
+		say("commander_zif", "The defenses of the compound were negligible.")
+		say("commander_zif", "I expect the relic to be in our possession shortly.")
+		# Actors::setZifOffThePhone()
+		set_animations("commander_zif", "res://characters/commander_zif/commander_zif_animations.tres")
+		say("player", "What of this lifeform, Sir?")
+		say("commander_zif", "Proceed with caution.")
+		say("commander_zif", "That may be some kind of weapon.")
+		walk_to_pos_block("player", 460, 480)
+		say("player", "I'll begin my search.")
+		say("commander_zif", "Keep me updated, ensign.")
+		# override block (not skipped: VAR_OVERRIDE = 0)
+		accept_input("ALL")
+		set_gui_visible(true)
+	if quick_init:
+		carol_room = "OfficeRoom"
+		set_active("carol", true)
+		teleport_pos("carol", 304, 392)
+		anim("carol", "init_down")
+		commander_zif_room = "OfficeRoom"
+		set_active("commander_zif", true)
+		teleport_pos("commander_zif", 640, 480)
+		ensign_zob_room = "OfficeRoom"
+		set_active("player", true)
+		teleport_pos("player", 460, 480)
+		scumm_anim("carol", "idle")
+	if first_init:
+		set_gui_visible(true)
+		wait(0.67)  # SCUMM: random 20..60 frames
+		scumm_roam("commander_zif", "start", 80, 1040, 420, 520)

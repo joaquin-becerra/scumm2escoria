@@ -1,0 +1,87 @@
+# Generated from ResRoom::defaultAction
+
+:give
+	say("player", "Hmm. No.")
+
+:pickup
+	if scumm_a_actor:
+		say("player", "I can't carry him around.")
+	else:
+		say("player", "I can't pick that up.")
+
+:use
+	if scumm_a_actor:
+		if scumm_object_b != "":
+			say("player", "I can't use that on someone!")
+		else:
+			say("player", "I can't just *use* someone!")
+	else:
+		say("player", "I can't use that !")
+
+:open
+	if scumm_a_actor:
+		say("player", "You know these human bodies aren't very resistant, if i open it he might die.")
+		stop
+	if !scumm_a_class2:
+		say("player", "It's not the kind of thing that can be opened.")
+		stop
+	if scumm_a_state:
+		say("player", "It's already open.")
+		stop
+	set_state(scumm_object_a, "state_1")
+	scumm_state_var(scumm_object_a, 1)
+	# TODO scumm: condition if(getObjectVerbEntrypoint(objA, SetBoxes))
+	if false:
+		# TODO scumm: startObject2(objA, SetBoxes,[vrb, objA]);
+		pass
+
+:look
+	if scumm_a_actor:
+		say("player", "There is nothing special about him.")
+	else:
+		say("player", "There is nothing special about it.")
+
+:push
+	if scumm_a_actor:
+		say("player", "That wouldn't be very nice.")
+	else:
+		say("player", "I don't feel in shape today.")
+
+:close
+	if scumm_a_actor:
+		say("player", "Closing someone ?")
+		say("player", "That hardly make any sense.")
+		stop
+	if !scumm_a_class2:
+		say("player", "I don't think that this can be closed.")
+		stop
+	if !(scumm_a_state):
+		say("player", "It's already closed.")
+		stop
+	set_state(scumm_object_a, "state_0")
+	scumm_state_var(scumm_object_a, 0)
+	# TODO scumm: condition if(getObjectVerbEntrypoint(objA, SetBoxes))
+	if false:
+		# TODO scumm: startObject2(objA, SetBoxes,[vrb, objA]);
+		pass
+
+:talk
+	say("player", "Hmm. No.")
+
+:pull
+	if scumm_a_actor:
+		say("player", "That wouldn't be very nice.")
+	else:
+		say("player", "I don't feel in shape today.")
+
+:use_with
+	if scumm_a_actor:
+		if scumm_object_b != "":
+			say("player", "I can't use that on someone!")
+		else:
+			say("player", "I can't just *use* someone!")
+	else:
+		say("player", "I can't use that !")
+
+:give_with
+	say("player", "Hmm. No.")

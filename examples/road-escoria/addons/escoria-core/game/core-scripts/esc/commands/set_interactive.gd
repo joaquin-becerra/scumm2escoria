@@ -1,0 +1,84 @@
+## `set_interactive(object: String, interactive: Boolean)`
+##
+## Sets whether an object is interactive.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |object|`String`|Global ID of the object to change|yes|[br]
+## |interactive|`Boolean`|Whether the object should be interactive|yes|[br]
+## [br]
+## @ASHES
+## @COMMAND
+class_name SetInteractiveCommand
+extends ESCBaseCommand
+
+
+## The descriptor of the arguments of this command.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns the descriptor of the arguments of this command. The argument descriptor for this command. (`ESCCommandArgumentDescriptor`)
+func configure() -> ESCCommandArgumentDescriptor:
+	return ESCCommandArgumentDescriptor.new(
+		2,
+		[TYPE_STRING, TYPE_BOOL],
+		[null, null]
+	)
+
+
+## Validates whether the given arguments match the command descriptor.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |arguments|`Array`|The arguments to validate.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns True if the arguments are valid, false otherwise. (`bool`)
+func validate(arguments: Array):
+	if not super.validate(arguments):
+		return false
+
+	if not escoria.object_manager.has(arguments[0]):
+		raise_invalid_object_error(self, arguments[0])
+		return false
+	return true
+
+
+## Runs the command.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |command_params|`Array`|The parameters for the command.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns the execution result code. (`int`)
+func run(command_params: Array) -> int:
+	escoria.object_manager.get_object(command_params[0]).interactive = \
+			command_params[1]
+	return ESCExecution.RC_OK
+
+
+## Function called when the command is interrupted.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func interrupt():
+	# Do nothing
+	pass

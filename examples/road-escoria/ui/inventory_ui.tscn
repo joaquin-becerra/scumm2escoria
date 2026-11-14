@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/escoria-core/game/scenes/inventory/inventory_ui.gd" id="1"]
+[ext_resource type="Script" path="res://addons/escoria-core/ui_library/inventory/esc_inventory_container.gd" id="2"]
+[ext_resource type="Script" path="res://ui/inventory_scroll.gd" id="3"]
+[ext_resource type="FontFile" path="res://fonts/charset_2.fnt" id="4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
+
+[node name="inventory_ui" type="Control"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+script = ExtResource("1")
+inventory_ui_container = NodePath("ScrollContainer/GridContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 640
+offset_top = 64
+offset_right = 1280
+offset_bottom = 208
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+columns = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 16
+script = ExtResource("2")
+
+[node name="verb_12" type="Button" parent="."]
+layout_mode = 0
+offset_left = 540
+offset_top = 64
+offset_right = 604
+offset_bottom = 128
+alignment = 0
+focus_mode = 0
+flat = true
+text = ""
+script = ExtResource("3")
+step = -80
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(0.0000, 0.4980, 0.0000, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 1.0000, 0.0000, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 1.0000, 0.0000, 1)
+
+[node name="verb_13" type="Button" parent="."]
+layout_mode = 0
+offset_left = 540
+offset_top = 152
+offset_right = 604
+offset_bottom = 216
+alignment = 0
+focus_mode = 0
+flat = true
+text = ""
+script = ExtResource("3")
+step = 80
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("4")
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(0.0000, 0.4980, 0.0000, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 1.0000, 0.0000, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 1.0000, 0.0000, 1)

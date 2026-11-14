@@ -1,0 +1,12 @@
+:pickup
+	say("player", "Cool")
+	inventory_add("inv_obj_19")
+	set_state("obj_19", "state_1")
+	obj_19_state = 1
+	set_interactive("obj_19", false)
+
+:look
+	if ("inv_obj_19" in inventory):
+		say("player", "It's really sharp.")
+	else:
+		say("player", "Look nice !")

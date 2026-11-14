@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_00.png" id="1"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_01.png" id="2"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_03.png" id="4"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_04.png" id="5"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_05.png" id="6"]
+[ext_resource type="Texture2D" path="res://characters/cube_actor/frames/cube_06.png" id="7"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_item.gd" id="8"]
+[ext_resource type="Resource" path="res://characters/cube_actor/cube_actor_animations.tres" id="9"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_dialog_location.gd" id="10"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_interaction_location.gd" id="11"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}],
+"loop": true,
+"name": &"init_down",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}],
+"loop": false,
+"name": &"dissolve_down",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(136, 140)
+
+[node name="cube_actor" type="Area2D"]
+process_mode = 1
+script = ExtResource("8")
+global_id = "cube_actor"
+esc_script = "res://characters/cube_actor/cube_actor.esc"
+tooltip_name = "blue cup"
+default_action = "look"
+is_movable = true
+is_interactive = false
+interaction_angle = 90
+custom_data = {
+"scumm_base_offset_y": -68,
+"scumm_classes": ["ClassUntouchable"],
+"scumm_actor": true
+}
+speed = 240
+animations = ExtResource("9")
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"idle_down"
+autoplay = "idle_down"
+centered = false
+offset = Vector2(-68, -288)
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -218)
+shape = SubResource("RectangleShape2D_2")
+
+[node name="dialog_position" type="Marker2D" parent="."]
+position = Vector2(0, -540)
+script = ExtResource("10")
+
+[node name="approach" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+script = ExtResource("11")
+interaction_angle = 90

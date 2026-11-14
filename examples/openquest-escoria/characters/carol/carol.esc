@@ -1,0 +1,82 @@
+:give
+	# TODO scumm: condition if(objB && objB is Person)
+	if false:
+		say("player", "I don't think i should be giving this away.")
+		stop
+	else:
+		say("player", "I can't do that !")
+
+:pickup
+	say("player", "I don't need them.")
+
+:use
+	# TODO scumm: condition if(objA == commanderZif || objA == ensignZob)
+	if false:
+		# TODO scumm: VAR_EGO = objA;
+		camera_set_target(0, "player")
+	else:
+		say("player", "I can't just *use* someone.")
+
+:open
+	say("player", "They don't seem to open.")
+
+:look
+	if !knows_carol:
+		say("player", "A large carbon based mammal, it seems.")
+	else:
+		say("player", "It is Carol, one of the local lifeforms.")
+
+:smell
+	say("player", "This creature has an overwhelming pungent smell.")
+
+:talk
+	# OfficeRoom::zobTalkToCarol()
+	accept_input("SKIP")
+	set_gui_visible(false)
+	if !knows_carol:
+		say("player", "Speak, lifeform!")
+		say("player", "Is this translation matrix working?")
+		say("carol", "You're that guy from accounts, right?")
+	else:
+		say("player", "Greetings, Carol.")
+		say("carol", "You again?")
+	accept_input("ALL")
+	set_gui_visible(false)
+	?!
+		- "What is your designation?" [!(knows_carol)]
+			say("player", "What is your designation?")
+			say("carol", "What you on about?")
+			say("player", "How are you addressed by a superior officer?")
+			say("carol", "Carol.")
+			say("player", "Greetings, Carol.")
+			scumm_set_name("carol", "Carol")
+			knows_carol = 1
+		- "What is located through that passageway?" [!(asked_passageway)]
+			say("player", "What is located through that passageway?")
+			say("carol", "Err, reception, canteen...")
+			say("player", "Any stolen relics within those realms?")
+			say("carol", "Do you mean that new tea maker they installed?")
+			say("player", "No.")
+			say("carol", "Dunno then.")
+			asked_passageway = 1
+		- "Stand aside, I need to pass!"
+			say("player", "Stand aside, I need to pass!")
+			say("carol", "I just cleaned down there, you'll get the floor dirty.")
+			say("player", "In which case I shall remain here.")
+		- "Look out behind you, a three-headed monkey!"
+			say("player", "Look out behind you, a three-headed monkey!")
+			say("carol", "Yeah, that's Terry.")
+			say("carol", "He works in HR.")
+		- "May I move this plant?" [has_tried_to_move_plant and !has_talked_about_plant]
+			say("player", "May I move this plant?")
+			say("carol", "I haven't cleaned down there yet.")
+			say("player", "Then by moving the plant I am providing assistance.")
+			say("carol", "Oh yeah, go on then.")
+			has_talked_about_plant = 1
+		- "As you were."
+			say("player", "As you were.")
+			done
+	set_gui_visible(true)
+
+:move
+	say("player", "The lifeform is surprisingly sturdy, I don't believe I can use force.")

@@ -1,0 +1,69 @@
+:init
+	global asked_passageway = 0
+	global bluecup_actor_room = "SecretRoom"
+	global bullets_state = 1
+	global cabinet_drawer_state = 0
+	global carol_room = ""
+	global carol_state = 0
+	global commander_zif_room = ""
+	global commander_zif_state = 0
+	global cube_actor_room = "SecretRoom"
+	global cube_disappeared = 0
+	global did_office_intro = 0
+	global ensign_zob_room = ""
+	global exit_to_secret_room_state = 1
+	global has_pressed_plate = 0
+	global has_seen_bullets = 0
+	global has_shot_at_node = 0
+	global has_smelled_plate = 0
+	global has_talked_about_plant = 0
+	global has_talked_about_plate = 0
+	global has_tried_to_move_plant = 0
+	global inited_game = 0
+	global inv_gun_state = 0
+	global inv_scanner_state = 1
+	global knows_carol = 0
+	global light_switch_state = 0
+	global plant_state = 1
+	global player_state = 0
+	global terminal_activated = 0
+	global ufo_actor_room = ""
+	scumm_screen_effect(5)
+	scumm_fade_out(true)
+	change_scene("res://rooms/title_screen/title_screen.tscn")
+	inventory_add("inv_scanner")
+
+:newgame
+	global asked_passageway = 0
+	global bluecup_actor_room = "SecretRoom"
+	global bullets_state = 1
+	global cabinet_drawer_state = 0
+	global carol_room = ""
+	global carol_state = 0
+	global commander_zif_room = ""
+	global commander_zif_state = 0
+	global cube_actor_room = "SecretRoom"
+	global cube_disappeared = 0
+	global did_office_intro = 0
+	global ensign_zob_room = ""
+	global exit_to_secret_room_state = 1
+	global has_pressed_plate = 0
+	global has_seen_bullets = 0
+	global has_shot_at_node = 0
+	global has_smelled_plate = 0
+	global has_talked_about_plant = 0
+	global has_talked_about_plate = 0
+	global has_tried_to_move_plant = 0
+	global inited_game = 0
+	global inv_gun_state = 0
+	global inv_scanner_state = 1
+	global knows_carol = 0
+	global light_switch_state = 0
+	global plant_state = 1
+	global player_state = 0
+	global terminal_activated = 0
+	global ufo_actor_room = ""
+	scumm_screen_effect(5)
+	scumm_fade_out(true)
+	change_scene("res://rooms/title_screen/title_screen.tscn")
+	inventory_add("inv_scanner")

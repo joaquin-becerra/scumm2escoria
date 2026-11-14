@@ -1,0 +1,95 @@
+:use
+	var l3 = 0
+	var l4 = 0
+	# TODO scumm: condition if(objB == obj_19)
+	if false:
+		say("player", "Killing him won't help us.")
+	else:
+		say("player", "I can't just *use* someone.")
+
+:talk
+	var l3 = 0
+	var l4 = 0
+	accept_input("SKIP")
+	set_gui_visible(false)
+	say("player", "Hey Santa!")
+	if !(b2):
+		say("actor_1", "Yes, and you are ?")
+	accept_input("ALL")
+	if !(b2):
+		b2 = 1
+		set_gui_visible(false)
+		?!
+			- "Beasty, a fearsome fighter from the Evil!"
+				selected_sentence = 0
+				say("player", "Beasty, a fearsome fighter from the Evil!")
+				say("actor_1", "That sure sound very impressing.")
+				done
+			- "Beasty, from the Kingdom Der Evil."
+				selected_sentence = 1
+				say("player", "Beasty, from the Kingdom Der Evil.")
+				say("actor_1", "Isn't that the place where everything is named K-something?")
+				done
+			- "Beasty, an OS mascot."
+				selected_sentence = 2
+				say("player", "Beasty, an OS mascot.")
+				say("actor_1", "Can't be worse than beeing a children mascot.")
+				done
+			- "Beasty, a red guy with a trident."
+				selected_sentence = 3
+				say("player", "Beasty, a red guy with a trident.")
+				done
+			- "Beasty, a poor chap who lost his way."
+				selected_sentence = 4
+				say("player", "Beasty, a poor chap who lost his way.")
+				done
+			- "Beasty, a deamon."
+				selected_sentence = 5
+				say("player", "Beasty, a deamon.")
+				done
+			- "Beasty, ready to bring you hell."
+				selected_sentence = 6
+				say("player", "Beasty, ready to bring you hell.")
+				done
+		set_gui_visible(true)
+		if selected_sentence == 1:
+			set_gui_visible(false)
+			?!
+				- "Indeed, and we like it this way!"
+					selected_sentence = 0
+					say("player", "Indeed, and we like it this way!")
+					done
+				- "That's the place, anything against Ks?"
+					selected_sentence = 1
+					say("player", "That's the place, anything against Ks?")
+					say("actor_1", "Not really.")
+					say("actor_1", "I just tend to prefer Gs.")
+					done
+			set_gui_visible(true)
+	accept_input("SKIP")
+	say("actor_1", "What do you want?")
+	accept_input("ALL")
+	set_gui_visible(false)
+	?!
+		- "What is this place?" [!(b3)]
+			l4 = 1
+			say("player", "What is this place?")
+			say("actor_1", "It's the Grand Nation Of Maximum Eccentricity.")
+			b3 = 1
+		- "Are you really Santa, or just some guy in a red coat?" [!(b4)]
+			l4 = 1
+			say("player", "Are you really Santa, or just some guy in a red coat?")
+			say("actor_1", "I'am the real Santa.")
+			say("actor_1", "But not on duty so don't expect presents or anything.")
+			b4 = 1
+		- "Have a nice day." [l4]
+			l4 = 1
+			say("player", "Have a nice day.")
+			say("actor_1", "Bye.")
+			done
+		- "Nothing. Have a nice day." [!(l4)]
+			l4 = 1
+			say("player", "Nothing. Have a nice day.")
+			say("actor_1", "Bye.")
+			done
+	set_gui_visible(true)

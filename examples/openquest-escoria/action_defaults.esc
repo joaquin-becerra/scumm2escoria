@@ -1,0 +1,103 @@
+# Generated from ResRoom::defaultAction
+
+:give
+	if scumm_object_b != "" and scumm_b_person:
+		say("player", "I don't think i should be giving this away.")
+		stop
+	else:
+		say("player", "I can't do that !")
+
+:pickup
+	if scumm_a_pickable and scumm_inventory_a != "":
+		if scumm_inventory_a != "":
+			inventory_add(scumm_inventory_a)
+			set_interactive(scumm_object_a, false)
+			set_state(scumm_object_a, "state_0")
+			scumm_state_var(scumm_object_a, 0)
+			stop
+	if scumm_a_person:
+		say("player", "I don't need them.")
+	else:
+		say("player", "I don't need that.")
+
+:use
+	if scumm_a_person:
+		# TODO scumm: condition if(objA == commanderZif || objA == ensignZob)
+		if false:
+			# TODO scumm: VAR_EGO = objA;
+			camera_set_target(0, "player")
+		else:
+			say("player", "I can't just *use* someone.")
+		stop
+	if scumm_object_b != "":
+		# TODO scumm: condition if(getObjectVerbEntrypoint(objB, UsedWith))
+		if false:
+			# TODO scumm: startObject2(objB, UsedWith,[UsedWith, objB, objA]);
+			stop
+		if scumm_b_person:
+			say("player", "I can't use that on someone!")
+		else:
+			say("player", "That doesn't work.")
+	else:
+		say("player", "I don't know how to operate that.")
+
+:open
+	if scumm_a_person:
+		say("player", "They don't seem to open.")
+		stop
+	if !scumm_a_openable:
+		say("player", "That doesn't seem to open.")
+		stop
+	# TODO scumm: setObjectState(objA, ! getObjectState(objA));
+	# TODO scumm: condition if(getObjectVerbEntrypoint(objA, SetBoxes))
+	if false:
+		# TODO scumm: startObject2(objA, SetBoxes,[vrb, objA]);
+		pass
+
+:look
+	if scumm_a_person:
+		say("player", "Some kind of lifeform.")
+	else:
+		say("player", "Looks pretty ordinary.")
+
+:smell
+	if scumm_a_person:
+		say("player", "They have no odour.")
+	else:
+		say("player", "That has no odour.")
+
+:talk
+	if scumm_a_person:
+		say("player", "I don't know how to communicate with them.")
+	else:
+		say("player", "I don't know how to communicate with that.")
+
+:move
+	if scumm_a_person:
+		say("player", "Moving them would accomplish nothing.")
+	else:
+		say("player", "Moving that would accomplish nothing.")
+
+:use_with
+	if scumm_a_person:
+		# TODO scumm: condition if(objA == commanderZif || objA == ensignZob)
+		if false:
+			# TODO scumm: VAR_EGO = objA;
+			camera_set_target(0, "player")
+		else:
+			say("player", "I can't just *use* someone.")
+		stop
+	if scumm_object_b != "":
+		if scumm_b_person:
+			say("player", "I can't use that on someone!")
+		else:
+			say("player", "That doesn't work.")
+	else:
+		say("player", "I don't know how to operate that.")
+
+:give_with
+	if scumm_object_b != "" and scumm_b_person:
+		say("player", "I don't think i should be giving this away.")
+		stop
+	else:
+		say("player", "I can't do that !")

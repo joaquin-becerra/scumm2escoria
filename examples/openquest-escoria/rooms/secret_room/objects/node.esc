@@ -1,0 +1,20 @@
+:look
+	say("player", "It appears to assist in suspending the artifact.")
+
+:use "inv_gun"
+	if inv_gun_state != 2:
+		say("player", "The weapon is not loaded.")
+		stop
+	if cube_disappeared != 1:
+		say("player", "The suspension cage prevents a clear shot at the node.")
+		stop
+	accept_input("SKIP")
+	set_gui_visible(false)
+	has_shot_at_node = 1
+	scumm_anim("player", "fireup")
+	scumm_sound("res://sounds/shoot_cage_snd.wav")
+	wait(2.0)
+	say("player", "Missed!")
+	accept_input("ALL")
+	set_gui_visible(true)
+	say("player", "I am not familiar with the aiming reticule.")

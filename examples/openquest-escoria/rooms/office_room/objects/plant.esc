@@ -1,0 +1,36 @@
+:look
+	if !has_seen_bullets:
+		has_seen_bullets = 1
+		say("player", "There is a small object behind this plant beyond reach.")
+	else:
+		say("player", "This plant appears to be undergoing photosynthesis.")
+
+:move
+	if !has_seen_bullets:
+		say("player", "Moving this would accomplish nothing.")
+		stop
+	if !has_talked_about_plant:
+		accept_input("SKIP")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		say("carol", "Hey, I haven't cleaned there yet.")
+		has_tried_to_move_plant = 1
+		scumm_anim("player", "lower_arm")
+		wait(0.5)
+		accept_input("ALL")
+		stop
+	if plant_state == 1:
+		accept_input("SKIP")
+		scumm_anim("player", "raise_arm")
+		scumm_sound("res://sounds/move_plant_snd.wav")
+		wait(0.33)
+		set_state("plant", "state_2")
+		plant_state = 2
+		set_active("bullets", true)
+		wait(0.5)
+		scumm_anim("player", "lower_arm")
+		wait(0.5)
+		accept_input("ALL")
+		say("player", "There is a small box down here.")
+	else:
+		say("player", "It's fine over there.")

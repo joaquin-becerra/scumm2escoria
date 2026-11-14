@@ -1,0 +1,23 @@
+:use "obj_20"
+	say("player", "I don't want to destroy this door.")
+
+:use "obj_22"
+	say("player", "A axe is not that great to fish.")
+
+:use "actor_1"
+	var l3 = 0
+	var l4 = 0
+	say("player", "Killing him won't help us.")
+
+:pickup
+	say("player", "Cool")
+	inventory_add("inv_obj_19")
+	set_state("obj_19", "state_1")
+	obj_19_state = 1
+	set_interactive("obj_19", false)
+
+:look
+	if ("inv_obj_19" in inventory):
+		say("player", "It's really sharp.")
+	else:
+		say("player", "Look nice !")

@@ -7,3 +7,7 @@ nbproject/
 # Python
 __pycache__/
 *.pyc
+
+# Godot files made locally when the examples are opened or exported
+examples/*/.godot/
+examples/*/build/

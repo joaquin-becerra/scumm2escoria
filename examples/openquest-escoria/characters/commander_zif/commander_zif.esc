@@ -1,0 +1,91 @@
+:give
+	# TODO scumm: condition if(objB && objB is Person)
+	if false:
+		say("player", "I don't think i should be giving this away.")
+		stop
+	else:
+		say("player", "I can't do that !")
+
+:pickup
+	say("player", "I don't need them.")
+
+:use
+	# TODO scumm: condition if(objA == commanderZif || objA == ensignZob)
+	if false:
+		# TODO scumm: VAR_EGO = objA;
+		camera_set_target(0, "player")
+	else:
+		say("player", "I can't just *use* someone.")
+
+:open
+	say("player", "They don't seem to open.")
+
+:look
+	var asked = 0
+	say("player", "My commanding officer, Commander Zif.")
+
+:smell
+	var asked = 0
+	scumm_roam("commander_zif", "pause")
+	say("player", "Is that a new cologne, Sir?")
+	say("commander_zif", "I thought we got past these... feelings.")
+	say("player", "Sorry, Sir.")
+	scumm_roam("commander_zif", "resume")
+
+:talk
+	var asked = 0
+	scumm_roam("commander_zif", "pause")
+	if cube_disappeared:
+		# Actors::zobTalkToZifInSecretRoom()
+		accept_input("SKIP")
+		set_gui_visible(false)
+		turn_to("commander_zif", "player")
+		say("commander_zif", "Yes, ensign?")
+		accept_input("ALL")
+		set_gui_visible(false)
+		?!
+			- "What now, Sir?"
+				say("player", "What now, Sir?")
+				say("commander_zif", "Get artifact.")
+				say("commander_zif", "We need to leave orbit quickly.")
+				say("player", "I'll see what I can do.")
+				# override block (not skipped: VAR_OVERRIDE = 0)
+			- "I'll continue my search."
+				say("player", "I'll continue my search.")
+				say("commander_zif", "Very good.")
+				done
+		set_gui_visible(true)
+	else:
+		# Actors::zobTalkToZif()
+		accept_input("SKIP")
+		set_gui_visible(false)
+		turn_to("commander_zif", "player")
+		say("commander_zif", "Yes, ensign?")
+		accept_input("ALL")
+		set_gui_visible(false)
+		?!
+			- "What are your orders?"
+				say("player", "What are your orders?")
+				say("commander_zif", "Locate the stolen artifact.")
+				say("player", "Any ideas where?")
+				say("commander_zif", "Study your surroundings.")
+				say("commander_zif", "Use all the cunning and guile at your disposal.")
+				say("commander_zif", "Should you do this, you shall surely be successful.")
+				say("player", "Guile, right, aye sir.")
+				say("commander_zif", "Also get a gun with which to shoot things.")
+				# override block (not skipped: VAR_OVERRIDE = 0)
+			- "I require your assistance with this opening mechanism." [has_pressed_plate and !has_talked_about_plate]
+				say("player", "I require your assistance with this opening mechanism.")
+				say("commander_zif", "Have you deciphered its secrets?")
+				say("player", "Yes, I believe two persons are required.")
+				say("commander_zif", "In which case I shall follow you, ensign.")
+				has_talked_about_plate = 1
+			- "I'll continue my search."
+				say("player", "I'll continue my search.")
+				say("commander_zif", "Very good.")
+				done
+		set_gui_visible(true)
+	scumm_roam("commander_zif", "resume")
+
+:move
+	say("player", "Moving them would accomplish nothing.")

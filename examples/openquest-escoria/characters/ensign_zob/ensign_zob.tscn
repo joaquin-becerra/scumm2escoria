@@ -1,0 +1,690 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_N_01.png" id="1"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_N_02.png" id="2"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_N_03.png" id="3"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_N_04.png" id="4"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_E_01.png" id="5"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_E_02.png" id="6"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_E_03.png" id="7"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_E_04.png" id="8"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_S_01.png" id="9"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_S_02.png" id="10"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_S_03.png" id="11"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/walk_S_04.png" id="12"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/stand_N.png" id="13"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/stand_SE.png" id="14"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/stand_S.png" id="15"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_N_02.png" id="16"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_SE_01.png" id="17"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_SE_02.png" id="18"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_SE_03.png" id="19"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_S_01.png" id="20"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_S_02.png" id="21"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/talk_S_03.png" id="22"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/raisearm_N_01.png" id="23"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/raisearm_N_02.png" id="24"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/raisearm_SE_01.png" id="25"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/raisearm_SE_02.png" id="26"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/scan_S_01.png" id="27"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/scan_S_02.png" id="28"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/aim_E_01.png" id="29"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/aim_E_02.png" id="30"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/aim_E_03.png" id="31"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/fireup_E.png" id="32"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_01.png" id="33"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_02.png" id="34"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_03.png" id="35"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_04.png" id="36"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_05.png" id="37"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_06.png" id="38"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_07.png" id="39"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_08.png" id="40"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_09.png" id="41"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_10.png" id="42"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/beam_11.png" id="43"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_01.png" id="44"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_02.png" id="45"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_03.png" id="46"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_04.png" id="47"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_05.png" id="48"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_06.png" id="49"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_07.png" id="50"]
+[ext_resource type="Texture2D" path="res://characters/ensign_zob/frames/die_SE_08.png" id="51"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_player.gd" id="52"]
+[ext_resource type="Resource" path="res://characters/ensign_zob/ensign_zob_animations.tres" id="53"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_dialog_location.gd" id="54"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_interaction_location.gd" id="55"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": true,
+"name": &"init_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
+"loop": true,
+"name": &"init_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
+"loop": true,
+"name": &"init_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
+"loop": true,
+"name": &"init_left",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": true,
+"name": &"speak_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}],
+"loop": true,
+"name": &"speak_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22")
+}],
+"loop": true,
+"name": &"speak_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19")
+}],
+"loop": true,
+"name": &"speak_left",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24")
+}],
+"loop": false,
+"name": &"raise_arm_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26")
+}],
+"loop": false,
+"name": &"raise_arm_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": false,
+"name": &"raise_arm_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": false,
+"name": &"lower_arm_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14")
+}],
+"loop": false,
+"name": &"lower_arm_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13")
+}],
+"loop": false,
+"name": &"lower_arm_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}],
+"loop": false,
+"name": &"scan_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}],
+"loop": false,
+"name": &"scan_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27")
+}],
+"loop": false,
+"name": &"scan_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}],
+"loop": false,
+"name": &"fireup_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}],
+"loop": false,
+"name": &"fireup_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29")
+}],
+"loop": false,
+"name": &"fireup_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
+"loop": false,
+"name": &"beam_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
+"loop": false,
+"name": &"beam_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15")
+}],
+"loop": false,
+"name": &"beam_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51")
+}],
+"loop": false,
+"name": &"die_up",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51")
+}],
+"loop": false,
+"name": &"die_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51")
+}],
+"loop": false,
+"name": &"die_down",
+"speed": 7.5
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(176, 212)
+
+[node name="ensign_zob" type="Area2D"]
+process_mode = 1
+script = ExtResource("52")
+global_id = "player"
+esc_script = "res://characters/ensign_zob/ensign_zob.esc"
+tooltip_name = "Ensign Zob"
+default_action = "look"
+is_movable = true
+custom_data = {
+"scumm_base_offset_y": -168,
+"scumm_classes": ["Person"],
+"scumm_actor": true
+}
+dialog_color = Color(0.6549, 0.1216, 0.2235, 1)
+speed = 240
+animations = ExtResource("53")
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"idle_down"
+autoplay = "idle_down"
+centered = false
+offset = Vector2(-52, -168)
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2(36, -62)
+shape = SubResource("RectangleShape2D_2")
+
+[node name="dialog_position" type="Marker2D" parent="."]
+position = Vector2(0, -320)
+script = ExtResource("54")
+
+[node name="approach" type="Marker2D" parent="."]
+position = Vector2(120, 0)
+script = ExtResource("55")
+interaction_angle = 270

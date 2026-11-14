@@ -1,0 +1,129 @@
+:use
+	var i = 0
+	if exit_to_secret_room_state == 7:
+		say("player", "The door is already open.")
+		stop
+	if has_talked_about_plate:
+		scumm_roam("commander_zif", "pause")
+		accept_input("SKIP")
+		set_gui_visible(false)
+		walk_to_pos_block("commander_zif", 1068, 464)
+		say("commander_zif", "I'll operate the one over here.")
+		wait(0.33)
+		scumm_anim("player", "raise_arm")
+		scumm_anim("commander_zif", "raise_arm")
+		wait(0.5)
+		scumm_sound("res://sounds/open_door_snd.wav")
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_2")
+		exit_to_secret_room_state = 2
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_3")
+		exit_to_secret_room_state = 3
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_4")
+		exit_to_secret_room_state = 4
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_5")
+		exit_to_secret_room_state = 5
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_6")
+		exit_to_secret_room_state = 6
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_7")
+		exit_to_secret_room_state = 7
+		scumm_sound("res://sounds/opened_door_snd.wav")
+		scumm_anim("player", "lower_arm")
+		scumm_anim("commander_zif", "lower_arm")
+		wait(0.5)
+		say("commander_zif", "Continue your investigation.")
+		walk_to_pos("commander_zif", 800, 480)
+		# override block (not skipped: VAR_OVERRIDE = 0)
+		accept_input("ALL")
+		set_gui_visible(true)
+		scumm_roam("commander_zif", "resume")
+		stop
+	if has_smelled_plate:
+		accept_input("SKIP")
+		set_gui_visible(false)
+		has_pressed_plate = 1
+		scumm_anim("player", "raise_arm")
+		wait(0.5)
+		scumm_anim("player", "lower_arm")
+		wait(0.5)
+		accept_input("ALL")
+		set_gui_visible(true)
+		say("player", "Nothing happened.")
+		say("player", "The two plates appear to be connected.")
+		stop
+	say("player", "I don't know how to use that device.")
+
+:look
+	var i = 0
+	say("player", "It appears to be connected to the door mechanism.")
+
+:smell
+	var i = 0
+	has_smelled_plate = 1
+	say("player", "I can smell the residue left by the indigenous lifeforms.")
+	say("player", "It must be some kind of pressure plate.")
+
+:move
+	var i = 0
+	if exit_to_secret_room_state == 7:
+		say("player", "The door is already open.")
+		stop
+	if has_talked_about_plate:
+		scumm_roam("commander_zif", "pause")
+		accept_input("SKIP")
+		set_gui_visible(false)
+		walk_to_pos_block("commander_zif", 1068, 464)
+		say("commander_zif", "I'll operate the one over here.")
+		wait(0.33)
+		scumm_anim("player", "raise_arm")
+		scumm_anim("commander_zif", "raise_arm")
+		wait(0.5)
+		scumm_sound("res://sounds/open_door_snd.wav")
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_2")
+		exit_to_secret_room_state = 2
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_3")
+		exit_to_secret_room_state = 3
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_4")
+		exit_to_secret_room_state = 4
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_5")
+		exit_to_secret_room_state = 5
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_6")
+		exit_to_secret_room_state = 6
+		wait(0.17)
+		set_state("exit_to_secret_room", "state_7")
+		exit_to_secret_room_state = 7
+		scumm_sound("res://sounds/opened_door_snd.wav")
+		scumm_anim("player", "lower_arm")
+		scumm_anim("commander_zif", "lower_arm")
+		wait(0.5)
+		say("commander_zif", "Continue your investigation.")
+		walk_to_pos("commander_zif", 800, 480)
+		# override block (not skipped: VAR_OVERRIDE = 0)
+		accept_input("ALL")
+		set_gui_visible(true)
+		scumm_roam("commander_zif", "resume")
+		stop
+	if has_smelled_plate:
+		accept_input("SKIP")
+		set_gui_visible(false)
+		has_pressed_plate = 1
+		scumm_anim("player", "raise_arm")
+		wait(0.5)
+		scumm_anim("player", "lower_arm")
+		wait(0.5)
+		accept_input("ALL")
+		set_gui_visible(true)
+		say("player", "Nothing happened.")
+		say("player", "The two plates appear to be connected.")
+		stop
+	say("player", "I don't know how to use that device.")

@@ -1,0 +1,12 @@
+:setup
+	set_gui_visible(false)
+	if ensign_zob_room == "TitleScreen":
+		set_active("player", true)
+	else:
+		set_active("player", false)
+	scumm_restore_names()
+	scumm_roam("", "setup")
+	scumm_fade_in()
+
+:ready
+	pass

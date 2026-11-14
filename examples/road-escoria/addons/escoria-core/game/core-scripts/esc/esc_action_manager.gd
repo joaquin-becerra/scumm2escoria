@@ -1,0 +1,895 @@
+## Manages actions currently being carried out.
+## @MANAGER
+class_name ESCActionManager
+extends Resource
+
+
+## The current action verb was changed.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+signal action_changed
+
+## Emitted when an action has been completed.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+signal action_finished
+
+## Emitted when the action input state has changed.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+signal action_input_state_changed
+
+
+## States of the action input (verb, item, target):[br]
+## (I) -> AWAITING_VERB_OR_ITEM -> AWAITING_ITEM -> COMPLETED -> (E)[br]
+## or[br]
+## (I) -> AWAITING_VERB_OR_ITEM -> AWAITING_ITEM -> AWAITING_TARGET_ITEM -> COMPLETED -> (E)[br]
+## or[br]
+## (I) -> AWAITING_VERB_OR_ITEM -> AWAITING_VERB -> AWAITING_VERB_CONFIRMATION -> COMPLETED -> (E)
+enum ActionInputState {
+	AWAITING_VERB_OR_ITEM, ## Initial state
+	AWAITING_ITEM,        ## After initial state, verb is defined
+	AWAITING_TARGET_ITEM, ## Item defined requires a target object
+	AWAITING_VERB,        ## After initial state, item is defined
+	AWAITING_VERB_CONFIRMATION, ## Item was defined first, next verb, need verb confirmation
+	COMPLETED             ## Final state
+}
+
+## Actions understood by the do(...) method:[br]
+## * BACKGROUND_CLICK: Object is to move from its current position.[br]
+## * ITEM_LEFT_CLICK: Item has been clicked on with LMB.[br]
+## * ITEM_RIGHT_CLICK: Item has been clicked on with RMB.[br]
+## * TRIGGER_IN: Character has moved into a trigger area.[br]
+## * TRIGGER_OUT: Character has moved out of a trigger area.
+enum ACTION {
+	BACKGROUND_CLICK,
+	ITEM_LEFT_CLICK,
+	ITEM_RIGHT_CLICK,
+	TRIGGER_IN,
+	TRIGGER_OUT
+}
+
+
+# Basic required internal actions
+
+## ESCPlayer resource
+const ESCPlayer = preload("res://addons/escoria-core/game/core-scripts/esc_player.gd")
+
+## Action (event) triggered when a character has reached a destination.
+const ACTION_ARRIVED = "arrived"
+
+## Action (event) triggered when a scene is being exited.
+const ACTION_EXIT_SCENE = "exit_scene"
+
+## Action (event) triggered when a character is walking.
+const ACTION_WALK = "walk"
+
+
+## Current verb used.
+var current_action: String = "": set = set_current_action
+
+## Current tool (`ESCItem`/`ESCInventoryItem`) used.
+var current_tool: ESCObject
+
+## Current target where the tool is being used on/with (if any).
+var current_target: ESCObject
+
+## Current action input state.
+var action_state = ActionInputState.AWAITING_VERB_OR_ITEM:
+	set = set_action_input_state
+
+
+## Runs a generic action.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |action|`int`|type of the action to run|yes|[br]
+## |params|`Array`|Parameters for the action|no|[br]
+## |can_interrupt|`bool`|if true, this command will interrupt any ongoing event before it is finished BACKGROUND_CLICK [moving_obj, target, walk_fast] ITEM_LEFT_CLICK [item, input_event] ITEM_RIGHT_CLICK [item, input_event] TRIGGER_IN [trigger_id, object_id, trigger_in_verb] TRIGGER_OUT [trigger_id, object_id, trigger_out_verb]|no|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func do(action: int, params: Array = [], can_interrupt: bool = false) -> void:
+	if escoria.current_state == escoria.GameState.DEFAULT:
+		match action:
+			ACTION.BACKGROUND_CLICK:
+				if can_interrupt:
+					escoria.event_manager.interrupt([], false)
+
+				var walk_fast = false
+				if params.size() > 2:
+					walk_fast = true if params[2] else false
+
+				# Check moving object.
+				if not escoria.object_manager.has(params[0]):
+					escoria.logger.error(
+						self,
+						"Walk action requested for nonexisting object: %s."
+								% params[0]
+					)
+					return
+
+				var moving_obj = escoria.object_manager.get_object(params[0])
+				var target
+
+				if params[1] is String:
+					if not escoria.object_manager.has(params[1]):
+						escoria.logger.error(
+							self,
+							"Walk action requested to nonexisting destination object: %s."
+									% params[1]
+						)
+						return
+
+					target = escoria.object_manager.get_object(params[1])
+				elif params[1] is Vector2:
+					target = params[1]
+
+				self.perform_walk(moving_obj, target, walk_fast)
+
+			ACTION.ITEM_LEFT_CLICK:
+				if params[0] is String:
+					escoria.logger.info(
+						self,
+						"item_left_click on item %s." % params[0]
+					)
+
+					if can_interrupt:
+						escoria.event_manager.interrupt([], false)
+
+					var item = escoria.object_manager.get_object(params[0])
+
+					self.perform_inputevent_on_object(item, params[1])
+
+			ACTION.ITEM_RIGHT_CLICK:
+				if params[0] is String:
+					escoria.logger.info(
+						self,
+						"item_right_click on item %s." % params[0]
+					)
+
+					if can_interrupt:
+						escoria.event_manager.interrupt([], false)
+
+					var item = escoria.object_manager.get_object(params[0])
+
+					self.perform_inputevent_on_object(item, params[1])
+
+			ACTION.TRIGGER_IN:
+				var trigger_id = params[0]
+				var object_id = params[1]
+				var trigger_in_verb = params[2]
+				var trigger_object := escoria.object_manager.get_object(trigger_id)
+				escoria.logger.info(
+					self,
+					"trigger_in on trigger %s activated by %s." % [
+						trigger_id,
+						object_id
+					]
+				)
+
+				if not _is_object_actionable(trigger_object):
+					escoria.logger.info(
+						self,
+						"Trigger %s is not actionable. Skipping trigger_in." % trigger_id
+					)
+					return
+
+				var trigger_in_event = _get_trigger_event(trigger_object, trigger_in_verb, object_id)
+				if trigger_in_event:
+					escoria.event_manager.queue_event(trigger_in_event)
+				else:
+					escoria.logger.info(
+						self,
+						"%s event not found for object %s so nothing to do." % \
+							[trigger_in_verb, trigger_id])
+
+			ACTION.TRIGGER_OUT:
+				var trigger_id = params[0]
+				var object_id = params[1]
+				var trigger_out_verb = params[2]
+				var trigger_object := escoria.object_manager.get_object(trigger_id)
+				escoria.logger.info(
+					self,
+					"trigger_out on trigger %s activated by %s." % [
+						trigger_id,
+						object_id
+					]
+				)
+
+				if not _is_object_actionable(trigger_object):
+					escoria.logger.info(
+						self,
+						"Trigger %s is not actionable. Skipping trigger_out." % trigger_id
+					)
+					return
+
+				var trigger_out_event = _get_trigger_event(
+					trigger_object,
+					trigger_out_verb,
+					object_id
+				)
+				if trigger_out_event:
+					escoria.event_manager.queue_event(trigger_out_event)
+				else:
+					escoria.logger.info(
+						self,
+						"%s event not found for object %s so nothing to do." % \
+							[trigger_out_verb, trigger_id])
+
+
+			_:
+				escoria.logger.warn(
+					self,
+					"Action received: '%s' with params %s." % [action, params]
+				)
+	elif escoria.current_state == escoria.GameState.WAIT:
+		pass
+	elif escoria.current_state == escoria.GameState.LOADING:
+		pass
+
+
+func _get_trigger_event(trigger_object: ESCObject, trigger_verb: String, object_id: String):
+	if trigger_object.has_event_with_target(trigger_verb, object_id):
+		return trigger_object.get_event_with_target(trigger_verb, object_id)
+
+	return trigger_object.get_event_with_target(trigger_verb)
+
+
+## Sets the current state of action input. ## Parameters[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |p_state|`Variant`|the action input state to set|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func set_action_input_state(p_state) -> void:
+	action_state = p_state
+	action_input_state_changed.emit()
+
+
+## Sets the current action verb.
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |action|`String`|the action verb to set|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func set_current_action(action: String) -> void:
+	if action != current_action:
+		clear_current_tool()
+
+	current_action = action
+
+	if action_state == ActionInputState.AWAITING_VERB_OR_ITEM:
+		set_action_input_state(ActionInputState.AWAITING_ITEM)
+	elif action_state == ActionInputState.AWAITING_VERB:
+		set_action_input_state(ActionInputState.AWAITING_VERB_CONFIRMATION)
+
+	action_changed.emit()
+
+
+## Clears the current action.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func clear_current_action() -> void:
+	set_current_action("")
+	set_action_input_state(ActionInputState.AWAITING_VERB_OR_ITEM)
+	action_changed.emit()
+
+
+## Clears the current tool.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func clear_current_tool() -> void:
+	current_tool = null
+	current_target = null
+	if action_state == ActionInputState.AWAITING_VERB:
+		set_action_input_state(ActionInputState.AWAITING_VERB_OR_ITEM)
+	elif action_state == ActionInputState.AWAITING_TARGET_ITEM:
+		set_action_input_state(ActionInputState.AWAITING_ITEM)
+
+
+## Checks if the specified action is valid and returns the associated event; otherwise, we see if there's a "fallback" event and use that if necessary and, if not, we return no event as there's nothing to do. or there's a reason not to run an event.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |action|`String`|Action to execute (defined in attached ESC file and in action verbs UI) eg: arrived, use, look, pickup...|yes|[br]
+## |target|`ESCObject`|Target ESC object.|yes|[br]
+## |combine_with|`ESCObject`|ESC object to combine with.|no|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `ESCGrammarStmts.Event` value. (`ESCGrammarStmts.Event`)
+func _get_event_to_queue(
+	action: String,
+	target: ESCObject,
+	combine_with: ESCObject = null
+) -> ESCGrammarStmts.Event:
+
+	escoria.logger.info(
+		self,
+		"Checking if action '%s' on '%s' is valid..." % [action, target.global_id if target is ESCObject else target]
+	)
+
+	var event_to_return = null
+	# (scumm2escoria) objA / objB for action_defaults.esc
+	ScummDefaults.publish(target, combine_with)
+
+	# If the action makes this item wait for a second target object.
+	if target.node is ESCItem \
+			and action in target.node.actions_requiring_target_object:
+
+		# Check if object is in inventory or is not required to be in inventory to be used
+		if escoria.inventory_manager.inventory_has(target.global_id) or not target.node.use_from_inventory_only:
+			# We check the element to use on
+			if combine_with:
+				var do_combine = true
+				if combine_with.node is ESCItem \
+						and combine_with.node.use_from_inventory_only\
+						and not escoria.inventory_manager.inventory_has(
+							combine_with.global_id
+						):
+					do_combine = false
+
+				if do_combine:
+					if target.has_event_with_target(action, combine_with.global_id):
+						event_to_return = target.get_event_with_target(action, combine_with.global_id)
+					elif combine_with.has_event_with_target(action, target.global_id)\
+							and not combine_with.node.combine_is_one_way:
+
+						event_to_return = combine_with.get_event_with_target(action, target.global_id)
+					else:
+						# Check to see if there isn't a "fallback" action to
+						# run before we declare this a failure.
+						# (scumm2escoria) combination fallbacks: the item's own, then the game's
+						if target.has_event_with_target(action + "_with"):
+							event_to_return = target.get_event_with_target(action + "_with")
+						elif escoria.action_default_script \
+							and escoria.action_default_script.has_event_with_target(action + "_with"):
+							event_to_return = escoria.action_default_script.get_event_with_target(action + "_with")
+						elif escoria.action_default_script \
+							and escoria.action_default_script.has_event_with_target(action):
+
+							event_to_return = escoria.action_default_script.get_event_with_target(action)
+						else:
+							var errors = [
+								"Attempted to execute action '%s' between item %s and item %s" % [
+									action,
+									target.global_id,
+									combine_with.global_id
+								],
+								"Check that action ':%s %s' exists in the script of item '%s'" % [
+									action,
+									target.global_id,
+									combine_with.global_id
+								]
+							]
+
+							if combine_with.node.combine_is_one_way:
+								errors.append(
+									("Reason: %s's item interaction " + \
+									"is one-way.") % combine_with.global_id
+								)
+
+							escoria.logger.warn(
+								self,
+								"Invalid action: " + str(errors)
+							)
+				else:
+					escoria.logger.warn(
+						self,
+						"Invalid action on item: " +
+							(
+								"Trying to combine object %s with %s, "+
+								"but %s is not in inventory."
+							) % [
+								target.global_id,
+								combine_with.global_id,
+								combine_with.global_id
+							]
+					)
+		else:
+			escoria.logger.warn(
+				self,
+				"Invalid action on item: " +
+				"Trying to run action '%s' on object %s, " %
+				[
+					action,
+					target.node.global_id
+				]
+				+ "but item must be in inventory."
+			)
+	else:
+		if target.has_event_with_target(action):
+			# We only deal with the action here as long as it doesn't have a target associated with it.
+			event_to_return = target.get_event_with_target(action)
+		elif escoria.action_default_script \
+			and escoria.action_default_script.has_event_with_target(action):
+
+			# If there's a "fallback" action to run, return it
+			event_to_return = escoria.action_default_script.get_event_with_target(action)
+		else:
+			escoria.logger.warn(
+				self,
+				"Invalid action: " +
+					"Event for action '%s' on object '%s' not found." % [
+						action,
+						target.global_id
+					]
+			)
+
+	return event_to_return
+
+
+## Check to make sure `target_object` contains the specific `action`. If `target_object` has an entry for `action` that also requires a target itself (e.g. `:use "wrench"`), then we return `false` as targeted item actions are handled elsewhere.[br]
+## [br]
+## (The "target" in `target_object` is of a different meaning than the optional "target" in an event.)
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |target_object|`ESCObject`|`ESCObject` whose events we are to check to see if `action` has a corresponding event.|yes|[br]
+## |action|`String`|The action to check.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `bool` value. (`bool`)
+func _check_target_has_proper_action(target_object: ESCObject, action: String) -> bool:
+	if target_object.has_event_with_target(action):
+		if target_object.get_event_with_target(action).get_target():
+			return false
+
+		return true
+
+	return false
+
+
+## Runs the specified event.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |event|`Variant`|the event to be run.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `int` value. (`int`)
+func _run_event(event) -> int:
+	escoria.event_manager.queue_event(event)
+
+	var event_returned = await escoria.event_manager.event_finished
+
+	while event_returned[1] != event.get_event_name():
+		event_returned = await escoria.event_manager.event_finished
+
+	clear_current_action()
+	action_finished.emit()
+
+	return event_returned[0]
+
+
+## Makes an object walk to a destination. This can be either a 2D position or another object.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |moving_obj|`ESCObject`|Escoria object that should move toward the destination.|yes|[br]
+## |destination|`Variant`|Either a `Vector2` position or an `ESCObject` whose location is targeted.|yes|[br]
+## |is_fast|`bool`|Whether to use the object's fast movement speed when walking.|no|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func perform_walk(
+	moving_obj: ESCObject,
+	destination,
+	is_fast: bool = false
+) -> void:
+	if destination is Vector2:
+		var walk_context = ESCWalkContext.new(
+			null,
+			destination,
+			is_fast,
+			true
+		)
+		moving_obj.node.walk_to(destination, walk_context)
+
+	# Walk to object
+	elif destination is ESCObject:
+		if destination.node:
+			var target_position: Vector2
+			if destination.node is ESCLocation:
+				target_position = destination.node.global_position
+			else:
+				target_position = destination.node.get_interact_position()
+
+			var walk_context = ESCWalkContext.new(
+				destination,
+				target_position,
+				is_fast,
+				true
+			)
+
+			moving_obj.node.walk_to(target_position, walk_context)
+
+	else:
+		escoria.logger.error(
+			self,
+			"Function expected either a Vector2 or ESCObject type " + \
+			"for destination parameter. Destination provided was: %s." % destination
+		)
+		return
+
+
+## Event handler called when an object/item is clicked.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |obj|`ESCObject`|Object that was left clicked.|yes|[br]
+## |event|`InputEvent`|Input event that was received.|yes|[br]
+## |default_action|`bool`|If `true`, run the inventory default action.|no|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func perform_inputevent_on_object(
+	obj: ESCObject,
+	event: InputEvent,
+	default_action: bool = false
+) -> void:
+	# This validates the requested action, resolves the corresponding event,
+	# moves the player when needed, and only performs targeted item actions
+	# after verb + source item + target item have all been selected.
+
+	escoria.logger.info(
+		self,
+		"%s to perform event %s." % [obj.global_id, event]
+	)
+
+	# Don't interact after player movement towards object
+	# (because object is inactive for example)
+	var dont_interact = false
+
+	# We need to have the new action input state BEFORE initiating the player
+	# move so we determine now if the object clicked requires a target object
+	# depending on the used action verb.
+	var tool_just_set = _set_tool_and_action(obj, default_action)
+	var requires_target_object = _check_item_requires_target_object()
+
+	# If the clicked item is not in the inventory and the current tool was not set,
+	# then this is our first item, make it the tool.
+	if (not escoria.inventory_manager.inventory_has(obj.global_id) and not current_tool) \
+			or (current_tool and not requires_target_object):
+		current_tool = obj
+	# Else, if we have a tool and a target is required, this is our second item,
+	# make it the target.
+	elif requires_target_object and not tool_just_set:
+		current_target = obj
+
+	# Update the action input state
+	if action_state == ActionInputState.AWAITING_TARGET_ITEM and current_target:
+		set_action_input_state(ActionInputState.COMPLETED)
+	elif action_state == ActionInputState.AWAITING_ITEM and \
+			not requires_target_object:
+		set_action_input_state(ActionInputState.COMPLETED)
+	elif action_state == ActionInputState.AWAITING_ITEM and \
+			requires_target_object and not tool_just_set:
+		set_action_input_state(ActionInputState.AWAITING_TARGET_ITEM)
+
+	var event_to_queue: ESCGrammarStmts.Event = null
+
+
+	# Manage exits first, actions last
+	# If the clicked object is an exit and current action is "walk"/unset, we need to run the exit scene action.
+	if obj.node.is_exit and current_action in ["", ACTION_WALK]:
+		event_to_queue = _get_event_to_queue(ACTION_EXIT_SCENE, obj)
+	# If the clicked object is not an exit, we check if the current action is "walk"/unset
+	# If so, and if the object is not in the inventory, we need to run the arrived action.
+	elif current_action in ["", ACTION_WALK] and not escoria.inventory_manager.inventory_has(obj.global_id):
+		event_to_queue = _get_event_to_queue(ACTION_ARRIVED, obj)
+	# If the current action is set and different from "walk"/unset, check for targeted actions.
+	elif not current_action in ["", ACTION_WALK]:
+		# If the selected tool requires a target and a target is set, run the targeted action.
+		if requires_target_object and current_target:
+			event_to_queue = _get_event_to_queue(current_action, current_tool, current_target)
+		# If the selected tool requires a target, wait for the player to choose one.
+		elif requires_target_object:
+			set_action_input_state(ActionInputState.AWAITING_TARGET_ITEM)
+			# If object is in inventory make it current tool.
+			if escoria.inventory_manager.inventory_has(obj.global_id):
+				current_tool = obj
+			return
+			# If clicked object doesn't need a target, then we simply run the action.
+		else:
+			event_to_queue = _get_event_to_queue(current_action, obj)
+
+	# Get out of here if there's a specified action but an event couldn't be found.
+	# Note that `event_to_queue` may still be null, but we do need to start the
+	# player walking towards the destination.
+	if current_action and not event_to_queue:
+		clear_current_action()
+		action_finished.emit()
+		return
+
+	var event_flags = event_to_queue.get_flags() if event_to_queue else 0
+
+	if escoria.main.current_scene.player:
+		var destination_position: Vector2 = escoria.main.current_scene.player \
+				.global_position
+
+		# If clicked object not in inventory, player walks towards it
+		if not obj.node is ESCPlayer and \
+			not escoria.inventory_manager.inventory_has(obj.global_id) and \
+			not _telekinetic_applies_to(event_to_queue):
+				var context = await _walk_towards_object(
+					obj,
+					event.position,
+					event.double_click
+				)
+
+				# In case of an interrupted walk, we don't want to proceed.
+				if context == null:
+					return
+
+				destination_position = context.target_position
+				dont_interact = context.dont_interact_on_arrival
+
+		var player_global_pos = escoria.main.current_scene.player.global_position
+		var clicked_position = event.position
+
+		# Using this instead of is_equal_approx due to
+		# https://github.com/godotengine/godot/issues/65257
+		if (player_global_pos - destination_position).length() > 1.0:
+			dont_interact = true
+			escoria.logger.info(
+				self,
+				"Player could not reach destination coordinates %s. "  % str(destination_position) \
+					+ "Any requested action for %s will not fire." % obj.global_id
+			)
+			if obj.has_event_with_target(escoria.event_manager.EVENT_CANT_REACH):
+				escoria.event_manager.queue_event(obj.get_event_with_target(escoria.event_manager.EVENT_CANT_REACH))
+			else:
+				escoria.logger.info(
+					self,
+					"%s event not found for object %s so nothing to do." % \
+						[escoria.event_manager.EVENT_CANT_REACH, obj.global_id]
+				)
+
+	# If no interaction should happen after player has arrived, leave
+	# immediately.
+	if not dont_interact and event_to_queue:
+		_run_event(event_to_queue)
+
+
+func _telekinetic_applies_to(event: ESCGrammarStmts.Event) -> bool:
+	if event == null:
+		return false
+	if event.get_flags_with_conditions().has("TK"):
+		var tk_flag_condition = event.get_flags_with_conditions().get("TK")
+
+		if tk_flag_condition:
+			var interpreter: ESCInterpreter = ESCInterpreterFactory.create_interpreter()
+
+			var result = interpreter.look_up_global(tk_flag_condition.get_name())
+
+			return false if result == null else bool(result)
+
+		return true
+
+	return false
+
+
+## Determines whether the object in question can be acted upon.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |global_id|`String`|The global ID of the item to examine.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `bool` value. (`bool`)
+func is_object_actionable(global_id: String) -> bool:
+	var obj: ESCObject = escoria.object_manager.get_object(global_id) as ESCObject
+
+	return _is_object_actionable(obj)
+
+
+## Prepare the "obj" object for current_action: if required, set the object as current tool.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |obj|`ESCObject`|the ESCObject to prepare.|yes|[br]
+## |default_action|`bool`|if true, the default action set on the item is used.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func _set_tool_and_action(obj: ESCObject, default_action: bool):
+	var tool_just_set: bool = false
+	# Check if current_action and current_tool are already set
+	if current_action and current_tool:
+		if not current_action in escoria.action_manager \
+				.current_tool.node.actions_requiring_target_object:
+			current_tool = obj
+			tool_just_set = true
+	elif default_action:
+		if escoria.inventory_manager.inventory_has(obj.global_id):
+			current_action = obj.node.default_action_inventory
+		else:
+			current_action = obj.node.default_action
+	elif current_action in obj.node.actions_requiring_target_object:
+		current_tool = obj
+		tool_just_set = true
+	return tool_just_set
+
+
+## Checks if the current tool requires a target object for the selected action verb.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `bool` value. (`bool`)
+func _check_item_requires_target_object() -> bool:
+	return current_action \
+			and current_tool \
+			and current_action in current_tool.node.actions_requiring_target_object
+
+
+## Makes the player character walk towards the clicked item. Returns the resulting walk context.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |obj|`ESCObject`|the object that was clicked.|yes|[br]
+## |clicked_position|`Vector2`|the Position2D of the input click.|yes|[br]
+## |walk_fast|`bool`|if true, the player will walk fast to the object.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `ESCWalkContext` value. (`ESCWalkContext`)
+func _walk_towards_object(
+	obj: ESCObject,
+	clicked_position: Vector2,
+	walk_fast: bool
+) -> ESCWalkContext:
+	var destination_position: Vector2
+	var dont_interact: bool = false
+
+	if obj == null || obj.node == null:
+		escoria.logger.error(
+			self,
+			"walk_towards_object error. obj or obj.node not populated."
+		)
+	var interact_position = obj.node.get_interact_position()
+	# If clicked object is interactive, get destination position from it.
+	if escoria.object_manager.get_object(obj.global_id).interactive:
+		if interact_position != null:
+			destination_position = interact_position
+		else:
+			destination_position = obj.node.position
+	else:
+		destination_position = clicked_position
+		dont_interact = true
+
+	# Create walk context
+	var walk_context = ESCWalkContext.new(
+		obj,
+		destination_position,
+		walk_fast,
+		dont_interact
+	)
+
+	# Walk towards the clicked object
+	escoria.main.current_scene.player.walk_to(destination_position,
+		walk_context)
+
+	escoria.logger.debug(
+	self,
+	"Player walking to destination. Yielding."
+)
+
+	# Wait for the player to arrive before continuing with action.
+	var context: ESCWalkContext = await escoria.main.current_scene.player.arrived
+
+	if context.target_object != obj:
+		escoria.logger.debug(
+			self,
+			"Original walk context target does not match " \
+					+ "yielded walk context. Likely interrutped walk.")
+		return
+
+	escoria.logger.info(
+		self,
+		"Context arrived: %s." % context
+	)
+
+	# Confirm that reached item was the one user clicked in the first place.
+	# Don't interact if that is not the case.
+	if (context.target_object and context.target_object.\
+			global_id != walk_context.\
+			target_object.global_id) or \
+		(context.target_position != walk_context.target_position):
+		walk_context.dont_interact_on_arrival = true
+
+	return context
+
+
+## Determines whether the object in question can be acted upon.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |obj|`ESCObject`|the ESCObject to examine.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns a `bool` value. (`bool`)
+func _is_object_actionable(obj: ESCObject) -> bool:
+	var object_is_actionable: bool = true
+
+	if not obj:
+		return false
+
+	if not obj.active:
+		escoria.logger.trace(
+			self,
+			"Item %s is not active." % obj.global_id
+		)
+		object_is_actionable = false
+	elif not obj.interactive:
+		escoria.logger.trace(
+			self,
+			"Item %s is not interactive." % obj.global_id
+		)
+		object_is_actionable = false
+
+	return object_is_actionable

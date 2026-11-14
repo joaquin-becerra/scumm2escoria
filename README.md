@@ -17,6 +17,30 @@ There are three commands. All of them run from the root of this repository:
 | `python3 -m scumm2escoria.frontend.scumm_bin.bundle` | Extracts a compiled game into a bundle: images, sounds, data and a disassembly of its scripts |
 | `python3 -m scumm2escoria.frontend.scumm_bin.source` | Decompiles the scripts of a bundle into readable ScummC-style source |
 
+## Examples
+
+Two games converted by scumm2escoria, playable in the browser:
+
+### ▶ [Play OpenQuest](https://joaquin-becerra.github.io/godot-escoria-js-engine/player/?game=openquest-escoria)
+
+Michael Sheail's demo adventure, from its ScummC port: you are Zob, an alien
+agent, and with Commander Zif you search an office for the way into a secret
+room. Nine-verb interface, dialogs, inventory puzzles and a roaming character.
+Godot project: [`examples/openquest-escoria/`](examples/openquest-escoria/).
+
+### ▶ [Play road](https://joaquin-becerra.github.io/godot-escoria-js-engine/player/?game=road-escoria)
+
+ScummC's example game: you are Beasty, a little devil on a village road, with an
+axe to pick up and Santa Claus to talk to. Small, but it covers verbs, inventory
+and a dialog tree.
+Godot project: [`examples/road-escoria/`](examples/road-escoria/).
+
+Both run in the browser on
+[godot-escoria-js-engine](https://github.com/joaquin-becerra/godot-escoria-js-engine),
+a JavaScript engine for Godot + Escoria games; to play them in Godot, open the
+project folder (Project Manager → Import) and press Play. More in
+[`examples/README.md`](examples/README.md).
+
 ## Requirements
 
 - Python 3.10+ with [Pillow](https://pypi.org/project/pillow/) and

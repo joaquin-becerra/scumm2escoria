@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://dm8auqglffi85"
+path="res://.godot/imported/chtest.fnt-eed94c2d7fa12fab26477adcbe4eae06.fontdata"
+
+[deps]
+
+source_file="res://fonts/chtest.fnt"
+dest_files=["res://.godot/imported/chtest.fnt-eed94c2d7fa12fab26477adcbe4eae06.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

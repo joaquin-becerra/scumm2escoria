@@ -1,0 +1,5 @@
+:exit_scene
+	walk_to_pos_block("player", 200, 400)
+	scumm_screen_effect(130)
+	scumm_fade_out()
+	change_scene("res://rooms/office_room/office_room.tscn")

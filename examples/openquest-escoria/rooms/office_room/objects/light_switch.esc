@@ -1,0 +1,54 @@
+:use
+	if !(light_switch_state):
+		accept_input("SKIP")
+		say("player", "I'll turn this off.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_sound("res://sounds/switch_snd.wav")
+		scumm_room_intensity(143, 123, 119)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		set_state("light_switch", "state_1")
+		light_switch_state = 1
+		accept_input("ALL")
+	else:
+		accept_input("SKIP")
+		say("player", "I'll turn this back on.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_sound("res://sounds/switch_snd.wav")
+		scumm_room_intensity(255, 255, 255)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		set_state("light_switch", "state_0")
+		light_switch_state = 0
+		accept_input("ALL")
+
+:look
+	say("player", "Some kind of power distribution grid.")
+
+:move
+	if !(light_switch_state):
+		accept_input("SKIP")
+		say("player", "I'll turn this off.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_sound("res://sounds/switch_snd.wav")
+		scumm_room_intensity(143, 123, 119)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		set_state("light_switch", "state_1")
+		light_switch_state = 1
+		accept_input("ALL")
+	else:
+		accept_input("SKIP")
+		say("player", "I'll turn this back on.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_sound("res://sounds/switch_snd.wav")
+		scumm_room_intensity(255, 255, 255)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		set_state("light_switch", "state_0")
+		light_switch_state = 0
+		accept_input("ALL")

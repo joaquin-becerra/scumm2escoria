@@ -1,0 +1,205 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/escoria-ui-keyboard-9verbs/verbs_menu.gd" id="1"]
+[ext_resource type="FontFile" path="res://fonts/verb_chset.fnt" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
+
+[node name="actions" type="Control"]
+layout_mode = 0
+offset_right = 1280
+offset_bottom = 224
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="give" type="Button" parent="."]
+layout_mode = 0
+offset_left = 500
+offset_top = 120
+offset_right = 668
+offset_bottom = 160
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Give"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="pickup" type="Button" parent="."]
+layout_mode = 0
+offset_left = 324
+offset_top = 68
+offset_right = 492
+offset_bottom = 108
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Pick up"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="use" type="Button" parent="."]
+layout_mode = 0
+offset_left = 500
+offset_top = 172
+offset_right = 668
+offset_bottom = 212
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Use"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="open" type="Button" parent="."]
+layout_mode = 0
+offset_left = 668
+offset_top = 68
+offset_right = 836
+offset_bottom = 108
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Open"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="look" type="Button" parent="."]
+layout_mode = 0
+offset_left = 500
+offset_top = 68
+offset_right = 668
+offset_bottom = 108
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Examine"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="smell" type="Button" parent="."]
+layout_mode = 0
+offset_left = 668
+offset_top = 120
+offset_right = 836
+offset_bottom = 160
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Smell"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="talk" type="Button" parent="."]
+layout_mode = 0
+offset_left = 324
+offset_top = 120
+offset_right = 492
+offset_bottom = 160
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Talk to"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+
+[node name="move" type="Button" parent="."]
+layout_mode = 0
+offset_left = 668
+offset_top = 172
+offset_right = 836
+offset_bottom = 212
+focus_mode = 0
+toggle_mode = true
+flat = true
+text = "Move"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_focus_color = Color(0.8863, 0.8745, 0.8627, 1)
+theme_override_colors/font_hover_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0000, 0.2510, 0.5020, 1)

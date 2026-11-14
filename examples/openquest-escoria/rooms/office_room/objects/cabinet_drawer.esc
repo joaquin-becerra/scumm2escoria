@@ -1,0 +1,60 @@
+:pickup
+	if !(cabinet_drawer_state):
+		say("player", "I don't need that.")
+		stop
+	if !("inv_gun" in inventory):
+		accept_input("SKIP")
+		say("player", "I'll look in here I think.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		say("player", "There appears to be a small sidearm in this container.")
+		inventory_add("inv_gun")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		say("player", "And a plastic card containing some kind of circuitry.")
+		inventory_add("inv_card")
+		accept_input("ALL")
+	else:
+		say("player", "Nothing else in here.")
+
+:open
+	if !(cabinet_drawer_state):
+		scumm_sound("res://sounds/open_cabinet_snd.wav")
+	else:
+		scumm_sound("res://sounds/close_cabinet_snd.wav")
+	if cabinet_drawer_state:
+		set_state("cabinet_drawer", "state_0")
+		cabinet_drawer_state = 0
+	else:
+		set_state("cabinet_drawer", "state_1")
+		cabinet_drawer_state = 1
+
+:look
+	if !(cabinet_drawer_state):
+		say("player", "Some kind of containing vessel for multiple instances of parchment.")
+		stop
+	if !(cabinet_drawer_state):
+		say("player", "Looks pretty ordinary.")
+		stop
+	if !("inv_gun" in inventory):
+		accept_input("SKIP")
+		say("player", "I'll look in here I think.")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		say("player", "There appears to be a small sidearm in this container.")
+		inventory_add("inv_gun")
+		scumm_anim("player", "raise_arm")
+		wait(0.33)
+		scumm_anim("player", "lower_arm")
+		wait(0.33)
+		say("player", "And a plastic card containing some kind of circuitry.")
+		inventory_add("inv_card")
+		accept_input("ALL")
+	else:
+		say("player", "Nothing else in here.")

@@ -1,0 +1,20 @@
+:give "commander_zif"
+	say("player", "I don't think i should be giving this away.")
+
+:give "carol"
+	say("player", "I don't think i should be giving this away.")
+
+:pickup
+	inventory_add("inv_bullets")
+	set_interactive("bullets", false)
+	set_state("bullets", "state_0")
+	bullets_state = 0
+
+:use "commander_zif"
+	say("player", "I can't use that on someone!")
+
+:use "carol"
+	say("player", "I can't use that on someone!")
+
+:look
+	say("player", "A small box of projectiles.")

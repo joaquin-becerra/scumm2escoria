@@ -1,0 +1,38 @@
+:give "commander_zif"
+	scumm_roam("commander_zif", "pause")
+	say("commander_zif", "You're the scientist on this team, you use it.")
+	scumm_roam("commander_zif", "resume")
+
+:give "carol"
+	say("player", "I don't think i should be giving this away.")
+
+:use
+	if inv_scanner_state == 2:
+		say("player", "The scanner no longer functions.")
+		stop
+	say("player", "I'll scan the area.")
+	scumm_anim("player", "scan")
+	wait(0.5)
+	scumm_anim("player", "scan")
+	wait(0.5)
+	scumm_anim("player", "scan")
+	wait(0.5)
+	if ensign_zob_room == "SecretRoom":
+		say("player", "The artifact is in this room.")
+	else:
+		say("player", "I am detecting the artifact near this location.")
+
+:open
+	if inv_scanner_state == 2:
+		say("player", "The casing appears to be broken.")
+		stop
+	say("player", "I'll open up the housing.")
+	inventory_add("inv_batteries")
+	set_state("inv_scanner", "state_2")
+	inv_scanner_state = 2
+	set_state("inv_scanner", "state_2")
+	say("player", "The batteries have fallen out.")
+
+:look
+	say("player", "Standard issue hand scanner.")
+	say("player", "Detects most of the EM spectrum.")

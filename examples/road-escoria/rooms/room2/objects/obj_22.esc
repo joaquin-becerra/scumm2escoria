@@ -1,0 +1,20 @@
+:pickup
+	say("player", "I need something to put the water in.")
+
+:use
+	# TODO scumm: condition if(objB == obj_19)
+	if false:
+		say("player", "A axe is not that great to fish.")
+	else:
+		say("player", "Don't even think about it.")
+
+:look
+	accept_input("SKIP")
+	say("player", "Wa _ Water ??")
+	say("player", "I hate that stuff.")
+	accept_input("ALL")
+	# TODO scumm: condition if(objB == obj_19)
+	if false:
+		say("player", "A axe is not that great to fish.")
+	else:
+		say("player", "Don't even think about it.")

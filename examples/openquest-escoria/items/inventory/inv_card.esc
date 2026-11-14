@@ -1,0 +1,22 @@
+:give "carol"
+	say("carol", "I see you've got mainframe clearance.")
+	say("carol", "I'm gonna be dusting in there soon.")
+	say("carol", "Try and keep it tidy.")
+
+:give "commander_zif"
+	scumm_roam("commander_zif", "pause")
+	say("commander_zif", "Excellent work Zob, a key.")
+	say("commander_zif", "Keep this, use it to infiltrate the mainframe.")
+	scumm_roam("commander_zif", "resume")
+
+:use "inv_scanner"
+	say("player", "The key isn't compatible with this model.")
+
+:use "commander_zif"
+	say("player", "I can't use that on someone!")
+
+:use "carol"
+	say("player", "I can't use that on someone!")
+
+:look
+	say("player", "This device could be used to interact with some form of hardware.")

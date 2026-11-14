@@ -1,0 +1,6 @@
+:look
+	say("player", "This parchment appears to contain some kind of glyphs.")
+	say("player", "Most are directed to an individual called Memorandum.")
+
+:smell
+	say("player", "The substance fused to this parchment possesses an interesting aroma.")

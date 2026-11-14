@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://characters/ensign_zob/ensign_zob.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://rooms/skyline/background.png" id="3"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_terrain.gd" id="4"]
+[ext_resource type="PackedScene" path="res://characters/ufo_actor/ufo_actor.tscn" id="5"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_location.gd" id="6"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1"]
+vertices = PackedVector2Array(-1280, 0, 2560, 0, 2560, 576, -1280, 576)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+
+[node name="skyline" type="Node2D"]
+script = ExtResource("1")
+global_id = "skyline"
+camera_limits = [Rect2(0, 0, 1280, 576)]
+esc_script = "res://rooms/skyline/skyline.esc"
+player_scene = ExtResource("2")
+
+[node name="background" type="Sprite2D" parent="."]
+texture = ExtResource("3")
+centered = false
+
+[node name="walkable_area" type="Node2D" parent="."]
+script = ExtResource("4")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="walkable_area"]
+navigation_polygon = SubResource("NavigationPolygon_1")
+
+[node name="zplanes" type="Node2D" parent="."]
+
+[node name="objects" type="Node2D" parent="."]
+
+[node name="actors" type="Node2D" parent="."]
+
+[node name="ufo_actor" parent="actors" instance=ExtResource("5")]
+position = Vector2(-200, 320)
+z_index = 320
+
+[node name="player_start" type="Marker2D" parent="."]
+position = Vector2(-640, 288)
+script = ExtResource("6")
+global_id = "skyline_start"
+is_start_location = true

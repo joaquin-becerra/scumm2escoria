@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="ESCAnimationResource" format=3]
+
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/resources/esc_directionangle.gd" id="1"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/resources/esc_animationname.gd" id="2"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/resources/esc_animationresource.gd" id="3"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("1")
+angle_start = 315
+angle_size = 90
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_4"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_5"]
+script = ExtResource("1")
+angle_start = 45
+angle_size = 90
+
+[sub_resource type="Resource" id="Resource_6"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_7"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_8"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_9"]
+script = ExtResource("1")
+angle_start = 135
+angle_size = 90
+
+[sub_resource type="Resource" id="Resource_10"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_11"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_12"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_13"]
+script = ExtResource("1")
+angle_start = 225
+angle_size = 90
+
+[sub_resource type="Resource" id="Resource_14"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_15"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[sub_resource type="Resource" id="Resource_16"]
+script = ExtResource("2")
+animation = "idle_down"
+
+[resource]
+script = ExtResource("3")
+dir_angles = Array[ExtResource("1")]([SubResource("Resource_1"), SubResource("Resource_5"), SubResource("Resource_9"), SubResource("Resource_13")])
+directions = Array[ExtResource("2")]([SubResource("Resource_2"), SubResource("Resource_6"), SubResource("Resource_10"), SubResource("Resource_14")])
+idles = Array[ExtResource("2")]([SubResource("Resource_3"), SubResource("Resource_7"), SubResource("Resource_11"), SubResource("Resource_15")])
+speaks = Array[ExtResource("2")]([SubResource("Resource_4"), SubResource("Resource_8"), SubResource("Resource_12"), SubResource("Resource_16")])

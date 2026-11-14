@@ -1,0 +1,125 @@
+## `stop_snd([audio_bus: String])`
+##
+## Stops the given audio bus's stream. By default there are 4 audio buses set up by Escoria : `_sound`, which is used to play non-looping sound effects; `_music`, which plays looping music; `_ambient`, which plays looping background sounds; and `_speech`, which plays non-looping voice files (default: `_music`). Each simultaneous sound (e.g. multiple game sound effects) will require its own bus. To create additional buses, see the Godot sound documentation : [Audio buses](https://docs.godotengine.org/en/stable/tutorials/audio/audio_buses.html#doc-audio-buses)[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |audio_bus|`String`|Bus to stop ("_sound", "_music", "_speech", "_ambient", or a custom audio bus you have created.)|no|[br]
+## [br]
+## @ASHES
+## @COMMAND
+class_name StopSndCommand
+extends ESCBaseCommand
+
+## The previous sound state, saved for interrupting
+var previous_snd_state: String
+
+## The specified sound player
+var _snd_player: String
+
+
+## Constructor of this command.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func _init() -> void:
+	run_in_ready_allowed_during_savegame_loading = false
+
+
+## The descriptor of the arguments of this command.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns the descriptor of the arguments of this command. The argument descriptor for this command. (`ESCCommandArgumentDescriptor`)
+func configure() -> ESCCommandArgumentDescriptor:
+	return ESCCommandArgumentDescriptor.new(
+		0,
+		[TYPE_STRING],
+		["_music"]
+	)
+
+
+## Validates whether the given arguments match the command descriptor.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |arguments|`Array`|The arguments to validate.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns True if the arguments are valid, false otherwise. (`bool`)
+func validate(arguments: Array):
+	if not super.validate(arguments):
+		return false
+
+	if not escoria.object_manager.has(arguments[0]):
+		raise_error(
+			self,
+			"Invalid sound player. Sound player '%s' not registered." % arguments[0]
+		)
+		return false
+	_snd_player = arguments[0]
+	return true
+
+
+## Runs the command.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## | Name | Type | Description | Required? |[br]
+## |:-----|:-----|:------------|:----------|[br]
+## |command_params|`Array`|The parameters for the command.|yes|[br]
+## [br]
+## #### Returns[br]
+## [br]
+## Returns the execution result code. (`int`)
+func run(command_params: Array) -> int:
+	var sound_player = escoria.object_manager.get_object(command_params[0]).node
+	if sound_player:
+		if sound_player.get("state"):
+			previous_snd_state = sound_player.state
+		sound_player.set_state("off")
+	return ESCExecution.RC_OK
+
+
+## Function called when the command is interrupted.[br]
+## [br]
+## #### Parameters[br]
+## [br]
+## None.
+## [br]
+## #### Returns[br]
+## [br]
+## Returns nothing.
+func interrupt():
+	var sound_players = []
+	if previous_snd_state.is_empty():
+		previous_snd_state = "off"
+
+	if _snd_player.is_empty():
+		sound_players = [
+			ESCObjectManager.MUSIC,
+			ESCObjectManager.SOUND,
+			ESCObjectManager.SPEECH
+		]
+	else:
+		sound_players = [_snd_player]
+
+	for snd_player in sound_players:
+		if escoria.object_manager.get_object(snd_player).node:
+			escoria.object_manager.get_object(snd_player).node.set_state(
+				previous_snd_state
+			)

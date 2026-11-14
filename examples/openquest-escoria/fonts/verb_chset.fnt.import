@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://ceou0e64vqqdu"
+path="res://.godot/imported/verb_chset.fnt-e2657071ed5b99696b59917d55c01794.fontdata"
+
+[deps]
+
+source_file="res://fonts/verb_chset.fnt"
+dest_files=["res://.godot/imported/verb_chset.fnt-e2657071ed5b99696b59917d55c01794.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

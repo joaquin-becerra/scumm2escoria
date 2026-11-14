@@ -1,0 +1,16 @@
+:look
+	if terminal_activated:
+		say("player", "There is a keycard in this slot.")
+	else:
+		say("player", "This looks like the recepticle for some kind of electronic key.")
+
+:use "inv_card"
+	accept_input("SKIP")
+	say("player", "I think this should activate the terminal.")
+	scumm_anim("player", "raise_arm")
+	wait(0.42)
+	scumm_anim("player", "lower_arm")
+	terminal_activated = 1
+	if "inv_card" in inventory:
+		inventory_remove("inv_card")
+	accept_input("ALL")

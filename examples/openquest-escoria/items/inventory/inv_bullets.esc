@@ -1,0 +1,23 @@
+:give "commander_zif"
+	say("player", "I don't think i should be giving this away.")
+
+:give "carol"
+	say("player", "I don't think i should be giving this away.")
+
+:use "inv_gun"
+	# InventoryItems::loadGun()
+	set_state("inv_gun", "state_2")
+	inv_gun_state = 2
+	if "inv_bullets" in inventory:
+		inventory_remove("inv_bullets")
+	scumm_sound("res://sounds/loading_gun_snd.wav")
+	say("player", "The weapon has been loaded.")
+
+:use "commander_zif"
+	say("player", "I can't use that on someone!")
+
+:use "carol"
+	say("player", "I can't use that on someone!")
+
+:look
+	say("player", "This ammunition may be compatible with a projectile weapon.")

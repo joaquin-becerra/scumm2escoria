@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://characters/ufo_actor/frames/ufo_00.png" id="1"]
+[ext_resource type="Texture2D" path="res://characters/ufo_actor/frames/ufo_01.png" id="2"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_item.gd" id="3"]
+[ext_resource type="Resource" path="res://characters/ufo_actor/ufo_actor_animations.tres" id="4"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_dialog_location.gd" id="5"]
+[ext_resource type="Script" path="res://addons/escoria-core/game/core-scripts/esc_interaction_location.gd" id="6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"init_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"init_down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 7.5
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(328, 160)
+
+[node name="ufo_actor" type="Area2D"]
+process_mode = 1
+script = ExtResource("3")
+global_id = "ufo_actor"
+esc_script = "res://characters/ufo_actor/ufo_actor.esc"
+tooltip_name = "Ufo"
+default_action = "look"
+is_movable = true
+interaction_angle = 270
+custom_data = {
+"scumm_base_offset_y": -224,
+"scumm_classes": [],
+"scumm_actor": true
+}
+dialog_color = Color(0.6902, 0.6588, 0.2549, 1)
+speed = 240
+animations = ExtResource("4")
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"idle_down"
+autoplay = "idle_down"
+centered = false
+offset = Vector2(-160, -224)
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2(4, -144)
+shape = SubResource("RectangleShape2D_2")
+
+[node name="dialog_position" type="Marker2D" parent="."]
+position = Vector2(-240, -280)
+script = ExtResource("5")
+
+[node name="approach" type="Marker2D" parent="."]
+position = Vector2(120, 0)
+script = ExtResource("6")
+interaction_angle = 270

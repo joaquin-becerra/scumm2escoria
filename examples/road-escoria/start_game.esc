@@ -1,0 +1,31 @@
+:init
+	global actor_1_room = ""
+	global actor_2_room = ""
+	global b0 = 0
+	global b1 = 0
+	global b2 = 0
+	global b3 = 0
+	global b4 = 0
+	global obj_19_state = 0
+	global obj_20_state = 0
+	global scumm_random = 0
+	global selected_sentence = 0
+	scumm_screen_effect(5)
+	scumm_fade_out(true)
+	change_scene("res://rooms/room2/room2.tscn")
+
+:newgame
+	global actor_1_room = ""
+	global actor_2_room = ""
+	global b0 = 0
+	global b1 = 0
+	global b2 = 0
+	global b3 = 0
+	global b4 = 0
+	global obj_19_state = 0
+	global obj_20_state = 0
+	global scumm_random = 0
+	global selected_sentence = 0
+	scumm_screen_effect(5)
+	scumm_fade_out(true)
+	change_scene("res://rooms/room2/room2.tscn")
